@@ -19,7 +19,7 @@ namespace AbstractShopListImplement
 		public List<DishViewModel> GetFullList()
 		{
 			List<DishViewModel> result = new List<DishViewModel>();
-			foreach (var component in source.Products)
+			foreach (var component in source.Dishs)
 			{
 				result.Add(CreateModel(component));
 			}
@@ -32,11 +32,11 @@ namespace AbstractShopListImplement
 				return null;
 			}
 			List<DishViewModel> result = new List<DishViewModel>();
-			foreach (var product in source.Products)
+			foreach (var dish in source.Dishs)
 			{
-				if (product.DishName.Contains(model.DishName))
+				if (dish.DishName.Contains(model.DishName))
 				{
-					result.Add(CreateModel(product));
+					result.Add(CreateModel(dish));
 				}
 			}
 			return result;
@@ -47,86 +47,86 @@ namespace AbstractShopListImplement
 			{
 				return null;
 			}
-			foreach (var product in source.Products)
+			foreach (var dish in source.Dishs)
 			{
-				if (product.Id == model.Id || product.DishName == model.DishName)
+				if (dish.Id == model.Id || dish.DishName == model.DishName)
 				{
-					return CreateModel(product);
+					return CreateModel(dish);
 				}
 			}
 			return null;
 		}
 		public void Insert(DishBindingModel model)
 		{
-			Dish tempProduct = new Dish { Id = 1, DishComponents = new Dictionary<int, int>() };
-			foreach (var product in source.Products)
+			Dish tempDish = new Dish { Id = 1, DishComponents = new Dictionary<int, int>() };
+			foreach (var dish in source.Dishs)
 			{
-				if (product.Id >= tempProduct.Id)
+				if (dish.Id >= tempDish.Id)
 				{
-					tempProduct.Id = product.Id + 1;
+					tempDish.Id = dish.Id + 1;
 				}
 			}
-			source.Products.Add(CreateModel(model, tempProduct));
+			source.Dishs.Add(CreateModel(model, tempDish));
 		}
 		public void Update(DishBindingModel model)
 		{
-			Dish tempProduct = null;
-			foreach (var product in source.Products)
+			Dish tempDish = null;
+			foreach (var dish in source.Dishs)
 			{
-				if (product.Id == model.Id)
+				if (dish.Id == model.Id)
 				{
-					tempProduct = product;
+					tempDish = dish;
 				}
 			}
-			if (tempProduct == null)
+			if (tempDish == null)
 			{
 				throw new Exception("Элемент не найден");
 			}
-			CreateModel(model, tempProduct);
+			CreateModel(model, tempDish);
 		}
 		public void Delete(DishBindingModel model)
 		{
-			for (int i = 0; i < source.Products.Count; ++i)
+			for (int i = 0; i < source.Dishs.Count; ++i)
 			{
-				if (source.Products[i].Id == model.Id)
+				if (source.Dishs[i].Id == model.Id)
 				{
-					source.Products.RemoveAt(i);
+					source.Dishs.RemoveAt(i);
 					return;
 				}
 			}
 			throw new Exception("Элемент не найден");
 		}
-		private Dish CreateModel(DishBindingModel model, Dish product)
+		private Dish CreateModel(DishBindingModel model, Dish dish)
 		{
-			product.DishName = model.DishName;
-			product.Price = model.Price;
+			dish.DishName = model.DishName;
+			dish.Price = model.Price;
 			// удаляем убранные
-			foreach (var key in product.DishComponents.Keys.ToList())
+			foreach (var key in dish.DishComponents.Keys.ToList())
 			{
 				if (!model.DishComponents.ContainsKey(key))
 				{
-					product.DishComponents.Remove(key);
+					dish.DishComponents.Remove(key);
 				}
 			}
 			// обновляем существуюущие и добавляем новые
 			foreach (var component in model.DishComponents)
 			{
-				if (product.DishComponents.ContainsKey(component.Key))
+				if (dish.DishComponents.ContainsKey(component.Key))
 				{
-					product.DishComponents[component.Key] = model.DishComponents[component.Key].Item2;
+					dish.DishComponents[component.Key] = model.DishComponents[component.Key].Item2;
 				}
 				else
 				{
-					product.DishComponents.Add(component.Key, model.DishComponents[component.Key].Item2);
+					dish.DishComponents.Add(component.Key, model.DishComponents[component.Key].Item2);
 				}
 			}
-			return product;
+			return dish;
 		}
-		private DishViewModel CreateModel(Dish product)
+		private DishViewModel CreateModel(Dish dish)
 		{
 			// требуется дополнительно получить список компонентов для изделия с названиями и их количество
-			Dictionary<int, (string, int)> productComponents = new Dictionary<int, (string, int)>();
-			foreach (var pc in product.DishComponents)
+			Dictionary<int, (string, int)> dishComponents = new Dictionary<int, (string, int)>();
+			foreach (var pc in dish.DishComponents)
 			{
 				string componentName = string.Empty;
 				foreach (var component in source.Components)
@@ -137,14 +137,14 @@ namespace AbstractShopListImplement
 						break;
 					}
 				}
-				productComponents.Add(pc.Key, (componentName, pc.Value));
+				dishComponents.Add(pc.Key, (componentName, pc.Value));
 			}
 			return new DishViewModel
 			{
-				Id = product.Id,
-				DishName = product.DishName,
-				Price = product.Price,
-				DishComponents = productComponents
+				Id = dish.Id,
+				DishName = dish.DishName,
+				Price = dish.Price,
+				DishComponents = dishComponents
 			};
 		}
 	}

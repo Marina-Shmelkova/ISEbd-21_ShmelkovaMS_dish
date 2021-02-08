@@ -34,7 +34,7 @@ namespace AbstractShopListImplement
             List<OrderViewModel> result = new List<OrderViewModel>();
             foreach (var order in source.Orders)
             {
-                if (order.DishName.Contains(model.DishName))
+                if (order.DishId.ToString().Contains(model.DishId.ToString()))
                 {
                     result.Add(CreateModel(order));
                 }
@@ -47,12 +47,12 @@ namespace AbstractShopListImplement
             {
                 return null;
             }
-            foreach (var order in source.Orders)
+            foreach (var component in source.Orders)
             {
-                if (order.Id == model.Id || order.OrderName ==
-               model.OrderName)
+                if (component.Id == model.Id || component.DishId ==
+               model.DishId)
                 {
-                    return CreateModel(order);
+                    return CreateModel(component);
                 }
             }
             return null;
@@ -99,34 +99,35 @@ namespace AbstractShopListImplement
         }
         private Order CreateModel(OrderBindingModel model, Order order)
         {
-            Order.DishId = model.DishId == 0 ? Order.DishId : model.DishId;
-            Order.Count = model.Count;
-            Order.Sum = model.Sum;
-            Order.Status = model.Status;
-            Order.DateCreate = model.DateCreate;
-            Order.DateImplement = model.DateImplement;
+            order.DishId = model.DishId;
+            order.Count = model.Count;
+            order.Sum = model.Sum;
+            order.Status = model.Status;
+            order.DateImplement = model.DateImplement;
+            order.DateCreate = model.DateCreate;
             return order;
         }
         private OrderViewModel CreateModel(Order order)
         {
             string dishName = "";
-            for (int j = 0; j < source.Dishs.Count; ++j)
+            foreach (var dish in source.Dishs)
             {
-                if (source.Dishs[j].Id == Order.DishId)
+                if (dish.Id == order.DishId)
                 {
-                    dishName = source.Dishs[j].DishName;
-                    break;
+                    dishName = dish.DishName;
                 }
             }
+
             return new OrderViewModel
             {
-                Id = Order.Id,
+                Id = order.Id,
+                DishId = order.DishId,
+                Sum = order.Sum,
+                Count = order.Count,
+                Status = order.Status,
                 DishName = dishName,
-                Count = Order.Count,
-                Sum = Order.Sum,
-                Status = Order.Status,
-                DateCreate = Order.DateCreate,
-                DateImplement = Order.DateImplement
+                DateCreate = order.DateCreate,
+                DateImplement = order.DateImplement
             };
         }
     }

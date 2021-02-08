@@ -27,7 +27,7 @@ namespace AbstractShopView
 			InitializeComponent();
 			this.logic = service;
 		}
-        private void FormSeDish_Load(object sender, EventArgs e)
+        private void FormSetDish_Load(object sender, EventArgs e)
         {
             if (id.HasValue)
             {

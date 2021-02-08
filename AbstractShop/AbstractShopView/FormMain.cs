@@ -34,10 +34,12 @@ namespace AbstractShopView
 				var list = _orderLogic.Read(null);
 				if (list != null)
 				{
-					dataGridView.DataSource = list;
-					dataGridView.Columns[0].Visible = false;
-					dataGridView.Columns[1].Visible = false;
-					dataGridView.Columns[7].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+					dataGridView.Rows.Clear();
+					foreach (var order in list)
+					{
+						dataGridView.Rows.Add(new object[] { order.Id, order.DishId, order.DishName, order.Count, order.Sum,
+							order.Status,order.DateCreate, order.DateImplement});
+					}
 				}
 			}
 			catch (Exception ex)

@@ -41,13 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Component.cs" />
-    <Compile Include="ComponentStorage.cs" />
+    <Compile Include="Models\Component.cs" />
+    <Compile Include="Implements\ComponentStorage.cs" />
     <Compile Include="DataListSingleton.cs" />
-    <Compile Include="Dish.cs" />
-    <Compile Include="DishStorage.cs" />
-    <Compile Include="Order.cs" />
-    <Compile Include="OrderStorage.cs" />
+    <Compile Include="Models\Dish.cs" />
+    <Compile Include="Implements\DishStorage.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Implements\OrderStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

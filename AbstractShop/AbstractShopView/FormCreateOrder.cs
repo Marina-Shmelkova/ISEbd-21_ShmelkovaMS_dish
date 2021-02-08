@@ -31,9 +31,13 @@ namespace AbstractShopView
 			try
 			{
 				var list = _logicP.Read(null);
-				comboBoxName.DataSource = list;
-				comboBoxName.DisplayMember = "ProductName";
-				comboBoxName.ValueMember = "Id";
+				foreach (var component in list)
+				{
+					comboBoxName.DisplayMember = "DishName";
+					comboBoxName.ValueMember = "Id";
+					comboBoxName.DataSource = list;
+					comboBoxName.SelectedItem = null;
+				}
 			}
 			catch (Exception ex)
 			{

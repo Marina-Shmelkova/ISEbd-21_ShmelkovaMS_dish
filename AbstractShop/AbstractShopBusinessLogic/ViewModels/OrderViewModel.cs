@@ -14,7 +14,7 @@ namespace AbstractShopBusinessLogic.ViewModels
         public int Id { get; set; }
         public int DishId { get; set; }
         [DisplayName("Набор блюда")]
-        public string ProductName { get; set; }
+        public string DishName { get; set; }
         [DisplayName("Количество")]
         public int Count { get; set; }
         [DisplayName("Сумма")]

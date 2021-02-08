@@ -85,6 +85,12 @@
     <Compile Include="FormDish.Designer.cs">
       <DependentUpon>FormDish.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormDishs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDishs.Designer.cs">
+      <DependentUpon>FormDishs.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +113,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormDish.resx">
       <DependentUpon>FormDish.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDishs.resx">
+      <DependentUpon>FormDishs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
