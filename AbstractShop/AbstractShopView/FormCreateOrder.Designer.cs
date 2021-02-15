@@ -123,7 +123,7 @@
             this.Controls.Add(this.labelSum);
             this.Controls.Add(this.labelName);
             this.Name = "FormCreateOrder";
-            this.Text = "FormCreateOrder";
+            this.Text = "Оформление заказа";
             this.Load += new System.EventHandler(this.FormCreateOrder_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

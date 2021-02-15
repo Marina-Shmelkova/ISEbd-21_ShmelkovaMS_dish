@@ -182,14 +182,14 @@
             // блюдаToolStripMenuItem
             // 
             this.блюдаToolStripMenuItem.Name = "блюдаToolStripMenuItem";
-            this.блюдаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.блюдаToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.блюдаToolStripMenuItem.Text = "Блюда";
             this.блюдаToolStripMenuItem.Click += new System.EventHandler(this.КомпонентыToolStripMenuItem_Click);
             // 
             // наборыБлюдToolStripMenuItem
             // 
             this.наборыБлюдToolStripMenuItem.Name = "наборыБлюдToolStripMenuItem";
-            this.наборыБлюдToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.наборыБлюдToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.наборыБлюдToolStripMenuItem.Text = "Наборы блюд";
             this.наборыБлюдToolStripMenuItem.Click += new System.EventHandler(this.ИзделияToolStripMenuItem_Click);
             // 
@@ -207,7 +207,7 @@
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
             this.Name = "FormMain";
-            this.Text = "FormMain";
+            this.Text = "Заказ";
             this.Load += new System.EventHandler(this.FormMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.menuStrip.ResumeLayout(false);

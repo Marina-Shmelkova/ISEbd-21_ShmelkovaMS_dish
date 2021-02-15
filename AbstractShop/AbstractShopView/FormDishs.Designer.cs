@@ -98,7 +98,7 @@
             this.Controls.Add(this.buttonUpd);
             this.Controls.Add(this.buttonAdd);
             this.Name = "FormDishs";
-            this.Text = "FormDishs";
+            this.Text = "Разновидность наборов";
             this.Load += new System.EventHandler(this.FormDishs_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
