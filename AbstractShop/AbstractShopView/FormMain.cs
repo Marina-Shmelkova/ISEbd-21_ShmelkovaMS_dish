@@ -54,7 +54,7 @@ namespace AbstractShopView
 		}
 		private void ИзделияToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var form = Container.Resolve<FormDish>();
+			var form = Container.Resolve<FormDishs>();
 			form.ShowDialog();
 		}
 		private void ButtonCreateOrder_Click(object sender, EventArgs e)
