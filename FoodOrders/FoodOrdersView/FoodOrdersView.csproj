@@ -148,6 +148,10 @@
       <Project>{519c303b-6e15-44a3-8b90-2d7546c155d7}</Project>
       <Name>FoodOrdersBusinessLogic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FoodOrdersFileImplement\FoodOrdersFileImplement.csproj">
+      <Project>{44ba21af-ed36-47f6-be2f-fc3e51f257de}</Project>
+      <Name>FoodOrdersFileImplement</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FoodOrdersListImplement\FoodOrdersListImplement.csproj">
       <Project>{d86e6e61-c8f4-4267-b511-7c3623646db2}</Project>
       <Name>FoodOrdersListImplement</Name>
