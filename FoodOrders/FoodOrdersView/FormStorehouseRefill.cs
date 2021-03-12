@@ -1,5 +1,7 @@
-﻿using FoodOrdersBusinessLogic.BusinessLogics;
+﻿using FoodOrdersBusinessLogic.BindingModels;
+using FoodOrdersBusinessLogic.BusinessLogics;
 using FoodOrdersBusinessLogic.ViewModels;
+using FoodOrdersListImplement.Implements;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +17,9 @@ namespace FoodOrdersView
 {
     public partial class FormStorehouseRefill : Form
     {
+        StorehouseStorage _houseStorage = new StorehouseStorage();
+        StorehouseBindingModel bm = new StorehouseBindingModel();
+        public string ComponentName { get { return comboBoxComponent.Text; } }
         [Dependency]
         public new IUnityContainer Container { get; set; }
         public int ComponentId { get { return Convert.ToInt32(comboBoxComponent.SelectedValue); } set { comboBoxComponent.SelectedValue = value; } }
@@ -57,7 +62,7 @@ namespace FoodOrdersView
                 MessageBox.Show("Выберите склад", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
+            _houseStorage.Restocking(bm, StorehouseId, ComponentId, Count, ComponentName);
             DialogResult = DialogResult.OK;
             Close();
         }
