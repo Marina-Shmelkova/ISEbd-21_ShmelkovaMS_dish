@@ -52,6 +52,32 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             }
             return list;
         }
+        public List<ReportDishComponentViewModel> GetComponentsDish()
+        {
+            var components = _componentStorage.GetFullList();
+            var dishs = _dishStorage.GetFullList();
+            var list = new List<ReportDishComponentViewModel>();
+            foreach (var dish in dishs)
+            {
+                var record = new ReportDishComponentViewModel
+                {
+                    DishName = dish.DishName,
+                    Components = new List<Tuple<string, int>>(),
+                    TotalCount = 0
+                };
+
+                foreach (var component in components)
+                {
+                    if (dish.DishComponents.ContainsKey(component.Id))
+                    {
+                        record.Components.Add(new Tuple<string, int>(component.ComponentName, dish.DishComponents[component.Id].Item2));
+                        record.TotalCount += dish.DishComponents[component.Id].Item2;
+                    }
+                }
+                list.Add(record);
+            }
+            return list;
+        }
         /// <summary>
         /// Получение списка заказов за определенный период
         /// </summary>
@@ -61,8 +87,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         {
             return _orderStorage.GetFilteredList(new OrderBindingModel
             {
-                DateFrom =
-           model.DateFrom,
+                DateFrom = model.DateFrom,
                 DateTo = model.DateTo
             })
             .Select(x => new ReportOrdersViewModel
@@ -88,6 +113,15 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 Components = _componentStorage.GetFullList()
             });
         }
+        public void SaveDishsToWordFile(ReportBindingModel model)
+        {
+            SaveToWord.CreateDoc(new WordInfo
+            {
+                FileName = model.FileName,
+                Title = "Список изделий",
+                Dishs = _dishStorage.GetFullList()
+            });
+        }
         /// <summary>
         /// Сохранение компонент с указаеним продуктов в файл-Excel
         /// </summary>
@@ -99,6 +133,15 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 FileName = model.FileName,
                 Title = "Список компонент",
                 DishComponents = GetDishComponent()
+            });
+        }
+        public void SaveComponentDishToExcelFile(ReportBindingModel model)
+        {
+            SaveToExcel.CreateDoc(new ExcelInfo
+            {
+                FileName = model.FileName,
+                Title = "Список изделий",
+                ComponentDishs = GetComponentsDish()
             });
         }
         /// <summary>

@@ -1,4 +1,4 @@
-﻿using FoodOrdersBusinessLogic.HelperModels;
+﻿    using FoodOrdersBusinessLogic.HelperModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -46,7 +46,9 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     ParagraphAlignment = ParagraphAlignment.Left
                 });
             }
-            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always){ Document = document };
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always){ 
+                Document = document 
+            };
             renderer.RenderDocument();
             renderer.PdfDocument.Save(info.FileName);
         }

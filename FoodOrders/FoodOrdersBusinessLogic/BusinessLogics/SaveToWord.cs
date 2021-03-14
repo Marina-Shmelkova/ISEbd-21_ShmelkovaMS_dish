@@ -31,20 +31,50 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                         JustificationValues = JustificationValues.Center
                     }
                 }));
-                foreach (var component in info.Components)
+                if (info.Components != null)
                 {
-                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    foreach (var component in info.Components)
                     {
-                        Texts = new List<(string, WordTextProperties)> {
-                        (component.ComponentName, new WordTextProperties { Size = "24", }) },
-                        TextProperties = new WordTextProperties
+                        docBody.AppendChild(CreateParagraph(new WordParagraph
                         {
-                            Size = "24",
-                            JustificationValues = JustificationValues.Both
-                        }
-                    }));
+                            Texts = new List<(string, WordTextProperties)> {
+                        (component.ComponentName, new WordTextProperties { Size = "24", }) },
+                            TextProperties = new WordTextProperties
+                            {
+                                Size = "24",
+                                JustificationValues = JustificationValues.Both
+                            }
+                        }));
+                    }
+                    docBody.AppendChild(CreateSectionProperties());
                 }
-                docBody.AppendChild(CreateSectionProperties());
+                if (info.Dishs != null)
+                {
+                    foreach (var dish in info.Dishs)
+                    {
+                        docBody.AppendChild(CreateParagraph(new WordParagraph
+                        {
+                            Texts = new List<(string, WordTextProperties)> {
+                                (dish.DishName, new WordTextProperties {Bold = true, Size = "24", }) },
+                            TextProperties = new WordTextProperties
+                            {
+                                Size = "24",
+                                JustificationValues = JustificationValues.Both
+                            }
+                        })); ;
+                        docBody.AppendChild(CreateParagraph(new WordParagraph
+                        {
+                            Texts = new List<(string, WordTextProperties)> {
+                                ("Цена: " + dish.Price.ToString(), new WordTextProperties {Bold = false, Size = "24", }) },
+                            TextProperties = new WordTextProperties
+                            {
+                                Size = "24",
+                                JustificationValues = JustificationValues.Both
+                            }
+                        })); ;
+                    }
+                    docBody.AppendChild(CreateSectionProperties());
+                }
                 wordDocument.MainDocumentPart.Document.Save();
             }
         }
