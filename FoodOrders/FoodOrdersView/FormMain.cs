@@ -125,5 +125,10 @@ namespace FoodOrdersView
 		{
 
 		}
+
+		private void списокКомпонентовToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
