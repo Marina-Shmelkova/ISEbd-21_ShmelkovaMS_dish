@@ -118,35 +118,11 @@ namespace FoodOrdersView
 			LoadData();
 		}
 
-        private void блюдаПоНаборамToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-			var form = Container.Resolve<FormReportDishComponents>();
-			form.ShowDialog();
-		}
-
         private void списокЗаказовToolStripMenuItem_Click(object sender, EventArgs e)
         {
 			var form = Container.Resolve<FormReportOrders>();
 			form.ShowDialog();
 		}
-
-		private void списокБлюдToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
-			{
-				if (dialog.ShowDialog() == DialogResult.OK)
-				{
-					_report.SaveComponentsToWordFile(new ReportBindingModel
-					{
-						FileName =
-				   dialog.FileName
-					});
-					MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
-				   MessageBoxIcon.Information);
-				}
-			}
-		}
-
         private void наборыПоБлюдамToolStripMenuItem_Click(object sender, EventArgs e)
         {
 			var form = Container.Resolve<FormReportComponentDish>();

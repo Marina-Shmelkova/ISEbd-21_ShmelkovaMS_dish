@@ -62,54 +62,6 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     CellToName = "C1"
                 });
                 uint rowIndex = 2;
-                if (info.DishComponents != null)
-                {
-                    foreach (var pc in info.DishComponents)
-                    {
-                        InsertCellInWorksheet(new ExcelCellParameters
-                        {
-                            Worksheet = worksheetPart.Worksheet,
-                            ShareStringPart = shareStringPart,
-                            ColumnName = "A",
-                            RowIndex = rowIndex,
-                            Text = pc.ComponentName,
-                            StyleIndex = 0U
-                        });
-                        rowIndex++;
-                        foreach (var dish in pc.Dishs)
-                        {
-                            InsertCellInWorksheet(new ExcelCellParameters
-                            {
-                                Worksheet = worksheetPart.Worksheet,
-                                ShareStringPart = shareStringPart,
-                                ColumnName = "B",
-                                RowIndex = rowIndex,
-                                Text = dish.Item1,
-                                StyleIndex = 1U
-                            });
-                            InsertCellInWorksheet(new ExcelCellParameters
-                            {
-                                Worksheet = worksheetPart.Worksheet,
-                                ShareStringPart = shareStringPart,
-                                ColumnName = "C",
-                                RowIndex = rowIndex,
-                                Text = dish.Item2.ToString(),
-                                StyleIndex = 1U
-                            }); rowIndex++;
-                        }
-                        InsertCellInWorksheet(new ExcelCellParameters
-                        {
-                            Worksheet = worksheetPart.Worksheet,
-                            ShareStringPart = shareStringPart,
-                            ColumnName = "C",
-                            RowIndex = rowIndex,
-                            Text = pc.TotalCount.ToString(),
-                            StyleIndex = 0U
-                        });
-                        rowIndex++;
-                    }
-                    workbookpart.Workbook.Save();
-                }
                 if (info.ComponentDishs != null)
                 {
                     foreach (var pc in info.ComponentDishs)

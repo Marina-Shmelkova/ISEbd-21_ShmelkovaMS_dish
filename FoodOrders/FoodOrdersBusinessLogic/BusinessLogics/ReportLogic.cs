@@ -2,6 +2,7 @@
 using FoodOrdersBusinessLogic.HelperModels;
 using FoodOrdersBusinessLogic.Interfaces;
 using FoodOrdersBusinessLogic.ViewModels;
+using FoodOrdersBusinessLogic.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,41 +26,15 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         /// Получение списка компонент с указанием, в каких изделиях используются
         /// </summary>
         /// <returns></returns>
-        public List<ReportDishComponentViewModel> GetDishComponent()
+
+        public List<ReportComponentDishViewModel> GetComponentsDish()
         {
             var components = _componentStorage.GetFullList();
             var dishs = _dishStorage.GetFullList();
-            var list = new List<ReportDishComponentViewModel>();
-            foreach (var component in components)
-            {
-                var record = new ReportDishComponentViewModel
-                {
-                    ComponentName = component.ComponentName,
-                    Dishs = new List<Tuple<string, int>>(),
-                    TotalCount = 0
-                };
-                foreach (var dish in dishs)
-                {
-                    if (dish.DishComponents.ContainsKey(component.Id))
-                    {
-                        record.Dishs.Add(new Tuple<string, int>(dish.DishName,
-                        dish.DishComponents[component.Id].Item2));
-                        record.TotalCount +=
-                        dish.DishComponents[component.Id].Item2;
-                    }
-                }
-                list.Add(record);
-            }
-            return list;
-        }
-        public List<ReportDishComponentViewModel> GetComponentsDish()
-        {
-            var components = _componentStorage.GetFullList();
-            var dishs = _dishStorage.GetFullList();
-            var list = new List<ReportDishComponentViewModel>();
+            var list = new List<ReportComponentDishViewModel>();
             foreach (var dish in dishs)
             {
-                var record = new ReportDishComponentViewModel
+                var record = new ReportComponentDishViewModel
                 {
                     DishName = dish.DishName,
                     Components = new List<Tuple<string, int>>(),
@@ -70,7 +45,8 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 {
                     if (dish.DishComponents.ContainsKey(component.Id))
                     {
-                        record.Components.Add(new Tuple<string, int>(component.ComponentName, dish.DishComponents[component.Id].Item2));
+                        record.Components.Add(new Tuple<string, int>(component.ComponentName,
+                        dish.DishComponents[component.Id].Item2));
                         record.TotalCount += dish.DishComponents[component.Id].Item2;
                     }
                 }
@@ -96,7 +72,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 DishName = x.DishName,
                 Count = x.Count,
                 Sum = x.Sum,
-                Status = x.Status
+                Status = ((OrderStatus)Enum.Parse(typeof(OrderStatus), x.Status.ToString())).ToString()
             })
            .ToList();
         }
@@ -104,15 +80,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         /// Сохранение компонент в файл-Word
         /// </summary>
         /// <param name="model"></param>
-        public void SaveComponentsToWordFile(ReportBindingModel model)
-        {
-            SaveToWord.CreateDoc(new WordInfo
-            {
-                FileName = model.FileName,
-                Title = "Список компонент",
-                Components = _componentStorage.GetFullList()
-            });
-        }
+
         public void SaveDishsToWordFile(ReportBindingModel model)
         {
             SaveToWord.CreateDoc(new WordInfo
@@ -126,15 +94,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         /// Сохранение компонент с указаеним продуктов в файл-Excel
         /// </summary>
         /// <param name="model"></param>
-        public void SaveDishComponentToExcelFile(ReportBindingModel model)
-        {
-            SaveToExcel.CreateDoc(new ExcelInfo
-            {
-                FileName = model.FileName,
-                Title = "Список компонент",
-                DishComponents = GetDishComponent()
-            });
-        }
+
         public void SaveComponentDishToExcelFile(ReportBindingModel model)
         {
             SaveToExcel.CreateDoc(new ExcelInfo

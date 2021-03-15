@@ -55,17 +55,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                         docBody.AppendChild(CreateParagraph(new WordParagraph
                         {
                             Texts = new List<(string, WordTextProperties)> {
-                                (dish.DishName, new WordTextProperties {Bold = true, Size = "24", }) },
-                            TextProperties = new WordTextProperties
-                            {
-                                Size = "24",
-                                JustificationValues = JustificationValues.Both
-                            }
-                        })); ;
-                        docBody.AppendChild(CreateParagraph(new WordParagraph
-                        {
-                            Texts = new List<(string, WordTextProperties)> {
-                                ("Цена: " + dish.Price.ToString(), new WordTextProperties {Bold = false, Size = "24", }) },
+                                (dish.DishName, new WordTextProperties {Bold = true, Size = "24", }), ("    " + dish.Price.ToString(), new WordTextProperties {Bold = false, Size = "24", }) },
                             TextProperties = new WordTextProperties
                             {
                                 Size = "24",

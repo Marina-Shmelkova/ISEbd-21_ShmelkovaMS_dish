@@ -21,13 +21,15 @@ namespace FoodOrdersFileImplement.Implements
         }
         public List<OrderViewModel> GetFilteredList(OrderBindingModel model)
         {
-            if (model == null)
+            if (model.DateFrom != null && model.DateTo != null)
             {
-                return null;
+                return source.Orders
+                    .Where(rec => rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo)
+                    .Select(CreateModel).ToList();
             }
             return source.Orders
-                .Where(rec => rec.DishId.ToString().Contains(model.DishId.ToString()))
-                .Select(CreateModel).ToList();
+               .Where(rec => rec.DishId.ToString().Contains(model.DishId.ToString()))
+               .Select(CreateModel).ToList();
         }
 
         public OrderViewModel GetElement(OrderBindingModel model)
