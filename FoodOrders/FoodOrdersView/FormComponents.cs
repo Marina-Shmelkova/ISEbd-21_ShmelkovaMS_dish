@@ -17,6 +17,7 @@ namespace FoodOrdersView
     {
         [Dependency]
         public new IUnityContainer Container { get; set; }
+
         private readonly ComponentLogic logic;
         public FormComponents(ComponentLogic logic)
         {
@@ -91,11 +92,6 @@ namespace FoodOrdersView
         private void ButtonRef_Click(object sender, EventArgs e)
         {
             LoadData();
-        }
-
-        private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }
