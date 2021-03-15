@@ -31,10 +31,6 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         }
         public void CreateOrder(CreateOrderBindingModel model)
         {
-            if (!_houseStorage.Extract(model.Count, model.DishId))
-            {
-                throw new Exception("Компонентов не достаточно");
-            }
             _orderStorage.Insert(new OrderBindingModel
             {
                 DishId = model.DishId,
@@ -51,6 +47,10 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 Id =
            model.OrderId
             });
+            if (!_houseStorage.Extract(order.Count, order.DishId))
+            {
+                throw new Exception("Компонентов не достаточно");
+            }
             if (order == null)
             {
                 throw new Exception("Не найден заказ");

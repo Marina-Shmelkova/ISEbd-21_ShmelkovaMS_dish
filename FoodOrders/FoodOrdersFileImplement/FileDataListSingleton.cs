@@ -14,9 +14,13 @@ namespace FoodOrdersFileImplement.Implements
 	public class FileDataListSingleton
 	{
 		private static FileDataListSingleton instance;
+
 		private readonly string ComponentFileName = "Component.xml";
+
 		private readonly string OrderFileName = "Order.xml";
+
 		private readonly string DishFileName = "Dish.xml";
+
 		private readonly string StorehouseFileName = "Storehouse.xml";
 		public List<Component> Components { get; set; }
 		public List<Order> Orders { get; set; }
@@ -72,11 +76,7 @@ namespace FoodOrdersFileImplement.Implements
 				foreach (var elem in xElements)
 				{
 					OrderStatus status = 0;
-					DateTime? dateImplement = null;
-					if (elem.Element("DateImplement").Value != "")
-					{
-						dateImplement = Convert.ToDateTime(elem.Element("DateImplement").Value);
-					}
+					
 					switch (elem.Element("Status").Value)
 					{
 						case "Принят":
@@ -91,6 +91,11 @@ namespace FoodOrdersFileImplement.Implements
 						case "Оплачен":
 							status = OrderStatus.Оплачен;
 							break;
+					}
+					DateTime? dateImplement = null;
+					if (elem.Element("DateImplement").Value != "")
+					{
+						dateImplement = Convert.ToDateTime(elem.Element("DateImplement").Value);
 					}
 					list.Add(new Order
 					{
@@ -118,7 +123,8 @@ namespace FoodOrdersFileImplement.Implements
 					var prodComp = new Dictionary<int, int>();
 					foreach (var component in elem.Element("DishComponents").Elements("DishComponent").ToList())
 					{
-						prodComp.Add(Convert.ToInt32(component.Element("Key").Value), Convert.ToInt32(component.Element("Value").Value));
+						prodComp.Add(Convert.ToInt32(component.Element("Key").Value), 
+						Convert.ToInt32(component.Element("Value").Value));
 					}
 					list.Add(new Dish
 					{
@@ -205,7 +211,7 @@ namespace FoodOrdersFileImplement.Implements
 					var compElement = new XElement("DishComponents");
 					foreach (var component in dish.DishComponents)
 					{
-						compElement.Add(new XElement("DishtComponent",
+						compElement.Add(new XElement("DishComponent",
 						new XElement("Key", component.Key),
 						new XElement("Value", component.Value)));
 					}

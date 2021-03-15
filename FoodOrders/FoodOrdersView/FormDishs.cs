@@ -34,9 +34,10 @@ namespace FoodOrdersView
                 var list = logic.Read(null);
                 if (list != null)
                 {
-                    dataGridViewDish.DataSource = list;
-                    dataGridViewDish.Columns[0].Visible = false;
-                    dataGridViewDish.Columns[1].AutoSizeMode =
+                    dataGridView.DataSource = list;
+                    dataGridView.Columns[0].Visible = false;
+                    dataGridView.Columns[3].Visible = false;
+                    dataGridView.Columns[1].AutoSizeMode =
                     DataGridViewAutoSizeColumnMode.Fill;
                 }
             }
@@ -56,10 +57,10 @@ namespace FoodOrdersView
         }
         private void ButtonUpd_Click(object sender, EventArgs e)
         {
-            if (dataGridViewDish.SelectedRows.Count == 1)
+            if (dataGridView.SelectedRows.Count == 1)
             {
                 var form = Container.Resolve<FormDish>();
-                form.Id = Convert.ToInt32(dataGridViewDish.SelectedRows[0].Cells[0].Value);
+                form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     LoadData();
@@ -68,13 +69,13 @@ namespace FoodOrdersView
         }
         private void ButtonDel_Click(object sender, EventArgs e)
         {
-            if (dataGridViewDish.SelectedRows.Count == 1)
+            if (dataGridView.SelectedRows.Count == 1)
             {
                 if (MessageBox.Show("Удалить запись", "Вопрос", MessageBoxButtons.YesNo,
                MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     int id =
-                   Convert.ToInt32(dataGridViewDish.SelectedRows[0].Cells[0].Value);
+                   Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                     try
                     {
                         logic.Delete(new DishBindingModel { Id = id });
