@@ -10,6 +10,7 @@ namespace FoodOrdersDatabaseImplement.Models
     public class Order
     {
         public int Id { get; set; }
+        public int ClientId { get; set; }
         public int DishId { get; set; }
         [Required]
         public int Count { get; set; }
