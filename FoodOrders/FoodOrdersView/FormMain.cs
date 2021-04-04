@@ -18,10 +18,12 @@ namespace FoodOrdersView
 		[Dependency]
 		public new IUnityContainer Container { get; set; }
 		private readonly OrderLogic _orderLogic;
-		public FormMain(OrderLogic orderLogic)
+		private readonly ReportLogic _report;
+		public FormMain(OrderLogic orderLogic, ReportLogic report)
 		{
 			InitializeComponent();
 			this._orderLogic = orderLogic;
+			this._report = report;
 		}
 		private void FormMain_Load(object sender, EventArgs e)
 		{
@@ -34,12 +36,10 @@ namespace FoodOrdersView
 				var list = _orderLogic.Read(null);
 				if (list != null)
 				{
-					dataGridView.Rows.Clear();
-					foreach (var order in list)
-					{
-						dataGridView.Rows.Add(new object[] { order.Id, order.DishId, order.DishName, order.Count, order.Sum,
-							order.Status,order.DateCreate, order.DateImplement});
-					}
+					dataGridView.DataSource = list;
+					dataGridView.Columns[0].Visible = false;
+					dataGridView.Columns[1].Visible = false;
+					dataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 				}
 			}
 			catch (Exception ex)
@@ -116,14 +116,27 @@ namespace FoodOrdersView
 			LoadData();
 		}
 
-		private void menuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-		{
-
+        private void списокЗаказовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormReportOrders>();
+			form.ShowDialog();
+		}
+        private void наборыПоБлюдамToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormReportComponentDish>();
+			form.ShowDialog();
 		}
 
-		private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
-
+        private void списокНаборовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
+			{
+				if (dialog.ShowDialog() == DialogResult.OK)
+				{
+					_report.SaveDishsToWordFile(new ReportBindingModel { FileName = dialog.FileName });
+					MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			}
 		}
-	}
+    }
 }

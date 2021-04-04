@@ -11,10 +11,13 @@ namespace FoodOrdersBusinessLogic.ViewModels
     public class DishViewModel
     {
         public int Id { get; set; }
-        [DisplayName("Название набора блюда")]
+
+        [DisplayName("Название изделия")]
         public string DishName { get; set; }
+
         [DisplayName("Цена")]
         public decimal Price { get; set; }
+
         public Dictionary<int, (string, int)> DishComponents { get; set; }
     }
 }

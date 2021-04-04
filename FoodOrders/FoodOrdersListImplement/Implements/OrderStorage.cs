@@ -39,6 +39,14 @@ namespace FoodOrdersListImplement
                     result.Add(CreateModel(order));
                 }
             }
+            List<OrderViewModel> resultRep = new List<OrderViewModel>();
+            foreach (var order in source.Orders)
+            {
+                if (order.DateCreate >= model.DateFrom && order.DateCreate <= model.DateTo)
+                {
+                    resultRep.Add(CreateModel(order));
+                }
+            }
             return result;
         }
         public OrderViewModel GetElement(OrderBindingModel model)

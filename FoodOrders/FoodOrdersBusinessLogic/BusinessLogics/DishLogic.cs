@@ -50,8 +50,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         {
             var element = _dishStorage.GetElement(new DishBindingModel
             {
-                Id =
-           model.Id
+                Id = model.Id
             });
             if (element == null)
             {

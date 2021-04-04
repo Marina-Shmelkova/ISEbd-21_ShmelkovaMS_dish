@@ -21,13 +21,15 @@ namespace FoodOrdersFileImplement.Implements
         }
         public List<OrderViewModel> GetFilteredList(OrderBindingModel model)
         {
-            if (model == null)
+            if (model.DateFrom != null && model.DateTo != null)
             {
-                return null;
+                return source.Orders
+                    .Where(rec => rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo)
+                    .Select(CreateModel).ToList();
             }
             return source.Orders
-                .Where(rec => rec.DishId.ToString().Contains(model.DishId.ToString()))
-                .Select(CreateModel).ToList();
+               .Where(rec => rec.DishId.ToString().Contains(model.DishId.ToString()))
+               .Select(CreateModel).ToList();
         }
 
         public OrderViewModel GetElement(OrderBindingModel model)
@@ -84,26 +86,16 @@ namespace FoodOrdersFileImplement.Implements
 
         private OrderViewModel CreateModel(Order order)
         {
-            string dishName = null;
-
-            foreach (var dish in source.Dishs)
-            {
-                if (dish.Id == order.DishId)
-                {
-                    dishName = dish.DishName;
-                }
-            }
-
             return new OrderViewModel
             {
                 Id = order.Id,
                 DishId = order.DishId,
-                Status = order.Status,
-                Sum = order.Sum,
+                Count = order.Count,
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
-                Count = order.Count,
-                DishName = dishName
+                Sum = order.Sum,
+                Status = order.Status,
+                DishName = source.Dishs.FirstOrDefault(rec => rec.Id == order.DishId)?.DishName
             };
         }
     }

@@ -163,13 +163,13 @@ namespace FoodOrdersDatabaseImplement.Implements
                rec.DishId == model.Id.Value).ToList();
                 // удалили те, которых нет в модели
                 context.DishComponents.RemoveRange(dishComponents.Where(rec =>
-               !model.DishComponents.ContainsKey(rec.ComponentId)).ToList());
+                !model.DishComponents.ContainsKey(rec.ComponentId)).ToList());
                 context.SaveChanges();
                 // обновили количество у существующих записей
                 foreach (var updateComponent in dishComponents)
                 {
                     updateComponent.Count =
-                   model.DishComponents[updateComponent.ComponentId].Item2;
+                    model.DishComponents[updateComponent.ComponentId].Item2;
                     model.DishComponents.Remove(updateComponent.ComponentId);
                 }
                 context.SaveChanges();
