@@ -32,14 +32,6 @@
             this.buttonTakeOrderInWork = new System.Windows.Forms.Button();
             this.buttonCreateOrder = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dishId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Set = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Sum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DateStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DateEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonRef = new System.Windows.Forms.Button();
             this.buttonPayOrder = new System.Windows.Forms.Button();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -86,61 +78,10 @@
             // 
             this.dataGridView.BackgroundColor = System.Drawing.SystemColors.InactiveCaption;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Id,
-            this.dishId,
-            this.Set,
-            this.Count,
-            this.Sum,
-            this.Status,
-            this.DateStart,
-            this.DateEnd});
             this.dataGridView.Location = new System.Drawing.Point(12, 39);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.Size = new System.Drawing.Size(636, 387);
             this.dataGridView.TabIndex = 6;
-            // 
-            // Id
-            // 
-            this.Id.HeaderText = "Id";
-            this.Id.Name = "Id";
-            this.Id.Visible = false;
-            // 
-            // dishId
-            // 
-            this.dishId.HeaderText = "dishId";
-            this.dishId.Name = "dishId";
-            this.dishId.Visible = false;
-            // 
-            // Set
-            // 
-            this.Set.HeaderText = "Набор";
-            this.Set.Name = "Set";
-            // 
-            // Count
-            // 
-            this.Count.HeaderText = "Количество";
-            this.Count.Name = "Count";
-            // 
-            // Sum
-            // 
-            this.Sum.HeaderText = "Сумма";
-            this.Sum.Name = "Sum";
-            // 
-            // Status
-            // 
-            this.Status.HeaderText = "Статус";
-            this.Status.Name = "Status";
-            // 
-            // DateStart
-            // 
-            this.DateStart.HeaderText = "Дата начала";
-            this.DateStart.Name = "DateStart";
-            // 
-            // DateEnd
-            // 
-            this.DateEnd.HeaderText = "Дата окончания";
-            this.DateEnd.Name = "DateEnd";
             // 
             // buttonRef
             // 
@@ -186,21 +127,21 @@
             // блюдаToolStripMenuItem
             // 
             this.блюдаToolStripMenuItem.Name = "блюдаToolStripMenuItem";
-            this.блюдаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.блюдаToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.блюдаToolStripMenuItem.Text = "Блюда";
             this.блюдаToolStripMenuItem.Click += new System.EventHandler(this.КомпонентыToolStripMenuItem_Click);
             // 
             // наборыToolStripMenuItem
             // 
             this.наборыToolStripMenuItem.Name = "наборыToolStripMenuItem";
-            this.наборыToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.наборыToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.наборыToolStripMenuItem.Text = "Наборы";
             this.наборыToolStripMenuItem.Click += new System.EventHandler(this.ИзделияToolStripMenuItem_Click);
             // 
             // складыToolStripMenuItem
             // 
             this.складыToolStripMenuItem.Name = "складыToolStripMenuItem";
-            this.складыToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.складыToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.складыToolStripMenuItem.Text = "Склады";
             this.складыToolStripMenuItem.Click += new System.EventHandler(this.складыToolStripMenuItem_Click);
             // 
@@ -240,14 +181,6 @@
         private System.Windows.Forms.Button buttonTakeOrderInWork;
         private System.Windows.Forms.Button buttonCreateOrder;
         private System.Windows.Forms.DataGridView dataGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dishId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Set;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Count;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Sum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DateStart;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DateEnd;
         private System.Windows.Forms.Button buttonRef;
         private System.Windows.Forms.Button buttonPayOrder;
         private System.Windows.Forms.MenuStrip menuStrip;

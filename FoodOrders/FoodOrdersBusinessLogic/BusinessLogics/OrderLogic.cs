@@ -11,9 +11,11 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
     public class OrderLogic
     {
         private readonly IOrderStorage _orderStorage;
-        public OrderLogic(IOrderStorage orderStorage)
+        private readonly IStorehouseStorage _houseStorage;
+        public OrderLogic(IOrderStorage orderStorage, IStorehouseStorage houseStorage)
         {
             _orderStorage = orderStorage;
+            _houseStorage = houseStorage;
         }
         public List<OrderViewModel> Read(OrderBindingModel model)
         {
@@ -45,6 +47,10 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 Id =
            model.OrderId
             });
+            if (!_houseStorage.Extract(order.Count, order.DishId))
+            {
+                throw new Exception("Компонентов не достаточно");
+            }
             if (order == null)
             {
                 throw new Exception("Не найден заказ");
