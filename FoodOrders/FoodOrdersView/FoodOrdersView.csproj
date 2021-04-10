@@ -210,6 +210,24 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormStorehouse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStorehouse.Designer.cs">
+      <DependentUpon>FormStorehouse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormStorehouseRefill.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStorehouseRefill.Designer.cs">
+      <DependentUpon>FormStorehouseRefill.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormStorehouses.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStorehouses.Designer.cs">
+      <DependentUpon>FormStorehouses.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormComponent.resx">
@@ -232,6 +250,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStoreHouse.resx">
+      <DependentUpon>FormStorehouse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStorehouseRefill.resx">
+      <DependentUpon>FormStorehouseRefill.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStorehouses.resx">
+      <DependentUpon>FormStorehouses.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -268,10 +295,6 @@
     <ProjectReference Include="..\FoodOrdersFileImplement\FoodOrdersFileImplement.csproj">
       <Project>{44ba21af-ed36-47f6-be2f-fc3e51f257de}</Project>
       <Name>FoodOrdersFileImplement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FoodOrdersListImplement\FoodOrdersListImplement.csproj">
-      <Project>{d86e6e61-c8f4-4267-b511-7c3623646db2}</Project>
-      <Name>FoodOrdersListImplement</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
