@@ -10,9 +10,11 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
     public class StorehouseLogic
     {
         private readonly IStorehouseStorage _houseStorage;
-        public StorehouseLogic(IStorehouseStorage houseStorage)
+        private readonly IComponentStorage _componentStorage;
+        public StorehouseLogic(IStorehouseStorage houseStorage, IComponentStorage componentStorage)
         {
             _houseStorage = houseStorage;
+            _componentStorage = componentStorage;
         }
         public List<StorehouseViewModel> Read(StorehouseBindingModel model)
         {
@@ -57,6 +59,49 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 throw new Exception("Склад не найден");
             }
             _houseStorage.Delete(model);
+        }
+        public void Restocking(StorehouseBindingModel model, int StorehouseId, int ComponentId, int Count)
+        {
+            StorehouseViewModel house = _houseStorage.GetElement(new StorehouseBindingModel
+            {
+                Id = StorehouseId
+            });
+
+            ComponentViewModel component = _componentStorage.GetElement(new ComponentBindingModel
+            {
+                Id = ComponentId
+            });
+
+            if (house == null)
+            {
+                throw new Exception("Склад не найден");
+            }
+
+            if (component == null)
+            {
+                throw new Exception("Компонент не найден");
+            }
+
+            Dictionary<int, (string, int)> houseComponents = house.StorehouseComponents;
+
+            if (houseComponents.ContainsKey(ComponentId))
+            {
+                int count = houseComponents[ComponentId].Item2;
+                houseComponents[ComponentId] = (component.ComponentName, count + Count);
+            }
+            else
+            {
+                houseComponents.Add(ComponentId, (component.ComponentName, Count));
+            }
+
+            _houseStorage.Update(new StorehouseBindingModel
+            {
+                Id = house.Id,
+                StorehouseName = house.StorehouseName,
+                Responsible = house.Responsible,
+                DateCreate = house.DateCreate,
+                StorehouseComponents = houseComponents
+            });
         }
     }
 }

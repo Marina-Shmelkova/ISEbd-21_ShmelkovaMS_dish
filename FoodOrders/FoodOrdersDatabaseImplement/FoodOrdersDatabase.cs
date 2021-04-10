@@ -12,7 +12,7 @@ namespace FoodOrdersDatabaseImplement
         {
             if (optionsBuilder.IsConfigured == false)
             {
-                optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-3ETGF4T\MSSQLSERVER2;Initial Catalog=FoodOrdersDatabase;Integrated Security=True;MultipleActiveResultSets=True;");
+                optionsBuilder.UseSqlServer(@"Data Source=WIN-05LVFLG5M7P;Initial Catalog=FoodOrdersDatabase2;Integrated Security=True;MultipleActiveResultSets=True;");
             }
             base.OnConfiguring(optionsBuilder);
         }
@@ -20,6 +20,8 @@ namespace FoodOrdersDatabaseImplement
         public virtual DbSet<Dish> Dishs { set; get; }
         public virtual DbSet<DishComponent> DishComponents { set; get; }
         public virtual DbSet<Order> Orders { set; get; }
+        public virtual DbSet<Storehouse> Storehouses { set; get; }
+        public virtual DbSet<StorehouseComponent> StorehouseComponents { set; get; }
 
     }
 }

@@ -109,7 +109,7 @@ namespace FoodOrdersFileImplement.Implements
                 StorehouseComponents = house.StorehouseComponents.ToDictionary(recPC => recPC.Key, recPC => (source.Components.FirstOrDefault(recC => recC.Id == recPC.Key)?.ComponentName, recPC.Value))
             };
         }
-        public void Availability(StorehouseBindingModel houseBindingModel, int StorehouseId, int ComponentId, int Count, string ComponentName)
+       /* public void Availability(StorehouseBindingModel houseBindingModel, int StorehouseId, int ComponentId, int Count, string ComponentName)
         {
             StorehouseViewModel view = GetElement(new StorehouseBindingModel
             {
@@ -135,7 +135,7 @@ namespace FoodOrdersFileImplement.Implements
                 houseBindingModel.StorehouseComponents.Add(ComponentId, (ComponentName, Count));
             }
             Update(houseBindingModel);
-        }
+        }*/
         public bool Extract(int DishCount, int DishId)
         {
             var list = GetFullList();
