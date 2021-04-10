@@ -13,17 +13,17 @@ using Unity;
 
 namespace FoodOrdersView
 {
-    public partial class FormDishs : Form
+    public partial class FormStorehouses : Form
     {
         [Dependency]
         public new IUnityContainer Container { get; set; }
-        private readonly DishLogic logic;
-        public FormDishs(DishLogic logic)
+        private readonly StorehouseLogic logic;
+        public FormStorehouses(StorehouseLogic logic)
         {
             InitializeComponent();
             this.logic = logic;
         }
-        private void FormDishs_Load(object sender, EventArgs e)
+        private void FormStorehouses_Load(object sender, EventArgs e)
         {
             LoadData();
         }
@@ -36,7 +36,7 @@ namespace FoodOrdersView
                 {
                     dataGridView.DataSource = list;
                     dataGridView.Columns[0].Visible = false;
-                    dataGridView.Columns[3].Visible = false;
+                    dataGridView.Columns[4].Visible = false;
                     dataGridView.Columns[1].AutoSizeMode =
                     DataGridViewAutoSizeColumnMode.Fill;
                 }
@@ -49,7 +49,7 @@ namespace FoodOrdersView
         }
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormDish>();
+            var form = Container.Resolve<FormStorehouse>();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 LoadData();
@@ -59,7 +59,7 @@ namespace FoodOrdersView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormDish>();
+                var form = Container.Resolve<FormStorehouse>();
                 form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -78,7 +78,7 @@ namespace FoodOrdersView
                    Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                     try
                     {
-                        logic.Delete(new DishBindingModel { Id = id });
+                        logic.Delete(new StorehouseBindingModel { Id = id });
                     }
                     catch (Exception ex)
                     {

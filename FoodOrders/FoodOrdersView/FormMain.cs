@@ -34,12 +34,10 @@ namespace FoodOrdersView
 				var list = _orderLogic.Read(null);
 				if (list != null)
 				{
-					dataGridView.Rows.Clear();
-					foreach (var order in list)
-					{
-						dataGridView.Rows.Add(new object[] { order.Id, order.DishId, order.DishName, order.Count, order.Sum,
-							order.Status,order.DateCreate, order.DateImplement});
-					}
+					dataGridView.DataSource = list;
+					dataGridView.Columns[0].Visible = false;
+					dataGridView.Columns[1].Visible = false;
+					dataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 				}
 			}
 			catch (Exception ex)
@@ -55,6 +53,11 @@ namespace FoodOrdersView
 		private void ИзделияToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			var form = Container.Resolve<FormDishs>();
+			form.ShowDialog();
+		}
+		private void складыToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var form = Container.Resolve<FormStorehouses>();
 			form.ShowDialog();
 		}
 		private void ButtonCreateOrder_Click(object sender, EventArgs e)
@@ -116,14 +119,10 @@ namespace FoodOrdersView
 			LoadData();
 		}
 
-		private void menuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void пополнениеСкладаToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-
-		}
-
-		private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
-
+			var form = Container.Resolve<FormStorehouseRefill>();
+			form.ShowDialog();
 		}
 	}
 }
