@@ -21,17 +21,17 @@ namespace FoodOrdersDatabaseImplement.Implements
                     .Include(rec => rec.Implementer).Select(rec => new OrderViewModel
                     {
                         Id = rec.Id,
-                        DishName = rec.Dish.DishName,
+                        ClientId = rec.ClientId,
+                        ClientFIO = rec.Client.ClientFIO,
+                        ImplementerId = rec.ImplementerId,
+                        ImplementerFIO = rec.ImplementerId.HasValue ? rec.Implementer.ImplementerFIO : string.Empty,
                         DishId = rec.DishId,
+                        DishName = rec.Dish.DishName,
                         Count = rec.Count,
                         Sum = rec.Sum,
                         Status = rec.Status,
                         DateCreate = rec.DateCreate,
-                        DateImplement = rec.DateImplement,
-                        ClientId = rec.ClientId,
-                        ClientFIO = rec.Client.ClientFIO,
-                        ImplementerId = rec.ImplementerId,
-                        ImplementerFIO = rec.ImplementerId.HasValue ? rec.Implementer.ImplementerFIO : string.Empty
+                        DateImplement = rec.DateImplement
                     })
                 .ToList();
             }
@@ -62,18 +62,17 @@ namespace FoodOrdersDatabaseImplement.Implements
                     .Select(rec => new OrderViewModel
                     {
                         Id = rec.Id,
-                        DishName = rec.Dish.DishName,
+                        ClientId = rec.ClientId,
+                        ClientFIO = rec.Client.ClientFIO,
+                        ImplementerId = rec.ImplementerId,
+                        ImplementerFIO = rec.ImplementerId.HasValue ? rec.Implementer.ImplementerFIO : string.Empty,
                         DishId = rec.DishId,
+                        DishName = rec.Dish.DishName,
                         Count = rec.Count,
                         Sum = rec.Sum,
                         Status = rec.Status,
                         DateCreate = rec.DateCreate,
-                        DateImplement = rec.DateImplement,
-                        ClientId = rec.ClientId,
-                        ClientFIO = rec.Client.ClientFIO,
-                        ImplementerId = rec.ImplementerId,
-                        ImplementerFIO = rec.ImplementerId.HasValue ?
-                        rec.Implementer.ImplementerFIO : string.Empty
+                        DateImplement = rec.DateImplement
                     })
                     .ToList();
                 }
@@ -92,17 +91,18 @@ namespace FoodOrdersDatabaseImplement.Implements
                 return order != null ?
                 new OrderViewModel
                 {
-                        Id = order.Id,
-                        DishName = order.Dish.DishName,
-                        DishId = order.DishId,
-                        Count = order.Count,
-                        Sum = order.Sum,
-                        Status = order.Status,
-                        DateCreate = order.DateCreate,
-                        DateImplement = order.DateImplement,
-                        ClientFIO = order.Client.ClientFIO,
-                        ImplementerId = order.ImplementerId,
-                        ImplementerFIO = order.ImplementerId.HasValue ? order.Implementer.ImplementerFIO : string.Empty
+                    Id = order.Id,
+                    ClientId = order.ClientId,
+                    ClientFIO = order.Client.ClientFIO,
+                    ImplementerId = order.ImplementerId,
+                    ImplementerFIO = order.ImplementerId.HasValue ? order.Implementer.ImplementerFIO : string.Empty,
+                    DishId = order.DishId,
+                    DishName = order.Dish.DishName,
+                    Count = order.Count,
+                    Sum = order.Sum,
+                    Status = order.Status,
+                    DateCreate = order.DateCreate,
+                    DateImplement = order.DateImplement
                 } :
                 null;
             }

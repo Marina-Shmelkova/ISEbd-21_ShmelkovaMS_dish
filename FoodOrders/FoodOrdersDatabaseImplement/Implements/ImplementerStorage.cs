@@ -71,7 +71,7 @@ namespace FoodOrdersDatabaseImplement.Implements
         {
             using (var context = new FoodOrdersDatabase())
             {
-                context.Implementers.Add(CreateModel(model, new Implementer(), context));
+                context.Implementers.Add(CreateModel(model, new Implementer()));
                 context.SaveChanges();
             }
         }
@@ -84,7 +84,7 @@ namespace FoodOrdersDatabaseImplement.Implements
                 {
                     throw new Exception("Исполнитель не найден");
                 }
-                CreateModel(model, element, context);
+                CreateModel(model, element);
                 context.SaveChanges();
             }
         }
@@ -104,7 +104,7 @@ namespace FoodOrdersDatabaseImplement.Implements
                 }
             }
         }
-        private Implementer CreateModel(ImplementerBindingModel model, Implementer implementer, FoodOrdersDatabase database)
+        private Implementer CreateModel(ImplementerBindingModel model, Implementer implementer)
         {
             implementer.ImplementerFIO = model.ImplementerFIO;
             implementer.WorkingTime = model.WorkingTime;

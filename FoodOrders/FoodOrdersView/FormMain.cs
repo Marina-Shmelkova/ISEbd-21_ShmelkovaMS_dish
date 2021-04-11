@@ -23,9 +23,9 @@ namespace FoodOrdersView
 		public FormMain(OrderLogic orderLogic, ReportLogic report, WorkModeling modeling)
 		{
 			InitializeComponent();
-			_orderLogic = orderLogic;
-			workModeling = modeling;
-			_report = report;
+			this._orderLogic = orderLogic;
+			this.workModeling = modeling;
+			this._report = report;
 		}
 		private void FormMain_Load(object sender, EventArgs e)
 		{

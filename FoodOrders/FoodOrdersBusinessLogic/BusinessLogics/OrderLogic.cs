@@ -64,14 +64,14 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 _orderStorage.Update(new OrderBindingModel
                 {
                     Id = order.Id,
-                    DishId = order.DishId,
+                    ClientId = order.ClientId,
                     ImplementerId = model.ImplementerId,
+                    DishId = order.DishId,
                     Count = order.Count,
                     Sum = order.Sum,
                     DateCreate = order.DateCreate,
                     DateImplement = DateTime.Now,
-                    Status = OrderStatus.Выполняется,
-                    ClientId = order.ClientId
+                    Status = OrderStatus.Выполняется
                 });
             }
         }
@@ -99,7 +99,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 DateImplement = order.DateImplement,
                 Status = OrderStatus.Готов,
                 ClientId = order.ClientId,
-                ImplementerId = model.ImplementerId
+                ImplementerId = order.ImplementerId
             });
         }
         public void PayOrder(ChangeStatusBindingModel model)
