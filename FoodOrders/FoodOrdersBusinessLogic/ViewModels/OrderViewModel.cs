@@ -18,9 +18,10 @@ namespace FoodOrdersBusinessLogic.ViewModels
 
         [DataMember]
         public int ClientId { get; set; }
-
         [DataMember]
         public int DishId { get; set; }
+        [DataMember]
+        public int? ImplementerId { get; set; }
         [DataMember]
         [DisplayName("Клиент")]
         public string ClientFIO { get; set; }
@@ -28,6 +29,8 @@ namespace FoodOrdersBusinessLogic.ViewModels
         [DataMember]
         [DisplayName("Изделие")]
         public string DishName { get; set; }
+        [DisplayName("ФИО исполнителя")]
+        public string ImplementerFIO { get; set; }
 
         [DataMember]
         [DisplayName("Количество")]

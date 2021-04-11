@@ -12,6 +12,10 @@ namespace FoodOrdersDatabaseImplement.Models
         public int Id { get; set; }
         public int ClientId { get; set; }
         public int DishId { get; set; }
+        public Dish Dish { get; set; }
+        public Client Client { get; set; }
+        public Implementer Implementer { get; set; }
+        public int? ImplementerId { get; set; }
         [Required]
         public int Count { get; set; }
         [Required]
