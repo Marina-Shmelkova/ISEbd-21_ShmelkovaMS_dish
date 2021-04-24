@@ -18,7 +18,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
 
         public List<ClientViewModel> Read(ClientBindingModel model)
         {
-            if (model == null)
+            if (model == null || model.Email != null)
             {
                 return _clientStorage.GetFullList();
             }
