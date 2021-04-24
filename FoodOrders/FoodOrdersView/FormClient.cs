@@ -45,7 +45,32 @@ namespace FoodOrdersView
         }
         private void ButtonSave_Click(object sender, EventArgs e)
         {
-
+            if (string.IsNullOrEmpty(textBoxFIO.Text) || string.IsNullOrEmpty(textBoxEmail.Text) ||
+                string.IsNullOrEmpty(textBoxPassword.Text))
+            {
+                MessageBox.Show("Заполните все поля", "Ошибка", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                logic.CreateOrUpdate(new ClientBindingModel
+                {
+                    Id = id,
+                    ClientFIO = textBoxFIO.Text,
+                    Email = textBoxEmail.Text,
+                    Password = textBoxPassword.Text,
+                });
+                MessageBox.Show("Сохранение прошло успешно", "Сообщение",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            }
         }
 
         private void ButtonCancel_Click(object sender, EventArgs e)

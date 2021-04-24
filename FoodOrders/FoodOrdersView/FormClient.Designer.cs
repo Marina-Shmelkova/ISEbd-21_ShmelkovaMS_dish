@@ -121,7 +121,7 @@ namespace FoodOrdersView
             this.Controls.Add(this.textBoxEmail);
             this.Controls.Add(this.textBoxFIO);
             this.Name = "FormClient";
-            this.Text = "FormClient";
+            this.Text = "Создание клиента";
             this.Load += new System.EventHandler(this.FormClient_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
