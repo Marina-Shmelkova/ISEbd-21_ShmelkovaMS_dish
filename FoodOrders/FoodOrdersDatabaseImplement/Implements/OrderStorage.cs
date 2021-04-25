@@ -2,6 +2,7 @@
 using FoodOrdersBusinessLogic.Interfaces;
 using FoodOrdersBusinessLogic.ViewModels;
 using FoodOrdersDatabaseImplement.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace FoodOrdersDatabaseImplement.Implements
         {
             using (var context = new FoodOrdersDatabase())
             {
-                return context.Orders.Select(rec => new OrderViewModel
+                return context.Orders.Include(rec => rec.Dish).Select(rec => new OrderViewModel
                 {
                     Id = rec.Id,
                     DishName = context.Dishs.FirstOrDefault(r => r.Id == rec.DishId).DishName,
@@ -80,7 +81,7 @@ namespace FoodOrdersDatabaseImplement.Implements
             }
             using (var context = new FoodOrdersDatabase())
             {
-                var order = context.Orders
+                var order = context.Orders.Include(rec => rec.Dish)
                 .FirstOrDefault(rec => rec.Id == model.Id);
                 return order != null ?
                 new OrderViewModel

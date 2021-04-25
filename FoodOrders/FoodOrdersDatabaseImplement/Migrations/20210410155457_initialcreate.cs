@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FoodOrdersDatabaseImplement.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initialcreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,6 +32,21 @@ namespace FoodOrdersDatabaseImplement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Dishs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Storehouses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StorehouseName = table.Column<string>(nullable: false),
+                    Responsible = table.Column<string>(nullable: false),
+                    DateCreate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Storehouses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +100,33 @@ namespace FoodOrdersDatabaseImplement.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StorehouseComponents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StorehouseId = table.Column<int>(nullable: false),
+                    ComponentId = table.Column<int>(nullable: false),
+                    Count = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StorehouseComponents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StorehouseComponents_Components_ComponentId",
+                        column: x => x.ComponentId,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StorehouseComponents_Storehouses_StorehouseId",
+                        column: x => x.StorehouseId,
+                        principalTable: "Storehouses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_DishComponents_ComponentId",
                 table: "DishComponents",
@@ -99,6 +141,16 @@ namespace FoodOrdersDatabaseImplement.Migrations
                 name: "IX_Orders_DishId",
                 table: "Orders",
                 column: "DishId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StorehouseComponents_ComponentId",
+                table: "StorehouseComponents",
+                column: "ComponentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StorehouseComponents_StorehouseId",
+                table: "StorehouseComponents",
+                column: "StorehouseId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -110,10 +162,16 @@ namespace FoodOrdersDatabaseImplement.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Components");
+                name: "StorehouseComponents");
 
             migrationBuilder.DropTable(
                 name: "Dishs");
+
+            migrationBuilder.DropTable(
+                name: "Components");
+
+            migrationBuilder.DropTable(
+                name: "Storehouses");
         }
     }
 }

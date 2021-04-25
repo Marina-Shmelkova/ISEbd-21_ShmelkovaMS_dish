@@ -76,11 +76,11 @@ namespace FoodOrdersFileImplement.Implements
         private Order CreateModel(OrderBindingModel model, Order order)
         {
             order.DishId = model.DishId;
+            order.Count = model.Count;
             order.Status = model.Status;
             order.Sum = model.Sum;
             order.DateCreate = model.DateCreate;
-            order.DateImplement = model.DateImplement;
-            order.Count = model.Count;
+            order.DateImplement = model.DateImplement;      
             return order;
         }
 
@@ -93,9 +93,8 @@ namespace FoodOrdersFileImplement.Implements
                 Count = order.Count,
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
-                Sum = order.Sum,
-                Status = order.Status,
-                DishName = source.Dishs.FirstOrDefault(rec => rec.Id == order.DishId)?.DishName
+                Count = order.Count,
+                DishName = dishName
             };
         }
     }

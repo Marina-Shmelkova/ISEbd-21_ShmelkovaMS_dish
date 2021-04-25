@@ -11,6 +11,7 @@ namespace FoodOrdersDatabaseImplement.Models
     {
         public int Id { get; set; }
         public int DishId { get; set; }
+        public virtual Dish Dish { get; set; }
         [Required]
         public int Count { get; set; }
         [Required]
