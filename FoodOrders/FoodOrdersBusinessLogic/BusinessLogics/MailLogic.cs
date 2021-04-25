@@ -26,12 +26,14 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         private readonly IMessageInfoStorage _messageInfoStorage;
 
         private readonly IClientStorage _clientStorage;
+
         public MailLogic(IMessageInfoStorage messageInfoStorage, IClientStorage
-               clientStorage)
+        clientStorage)
         {
             _messageInfoStorage = messageInfoStorage;
             _clientStorage = clientStorage;
         }
+
         public List<MessageInfoViewModel> Read(MessageInfoBindingModel model)
         {
             if (model == null)
@@ -40,6 +42,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             }
             return _messageInfoStorage.GetFilteredList(model);
         }
+
         public void CreateOrder(MessageInfoBindingModel model)
         {
             var client = _clientStorage.GetElement(new ClientBindingModel
@@ -49,6 +52,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             model.ClientId = client?.Id;
             _messageInfoStorage.Insert(model);
         }
+
         public static void MailConfig(MailConfig config)
         {
             smtpClientHost = config.SmtpClientHost;
@@ -56,6 +60,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             mailLogin = config.MailLogin;
             mailPassword = config.MailPassword;
         }
+
         public static async void MailSendAsync(MailSendInfo info)
         {
             if (string.IsNullOrEmpty(smtpClientHost) || smtpClientPort == 0)
@@ -98,6 +103,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 }
             }
         }
+
         public static async void MailCheck(MailCheckInfo info)
         {
             if (string.IsNullOrEmpty(info.PopHost) || info.PopPort == 0)

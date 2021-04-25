@@ -76,14 +76,14 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 _orderStorage.Update(new OrderBindingModel
                 {
                     Id = order.Id,
-                    ClientId = order.ClientId,
                     ImplementerId = model.ImplementerId,
                     DishId = order.DishId,
                     Count = order.Count,
                     Sum = order.Sum,
                     DateCreate = order.DateCreate,
                     DateImplement = DateTime.Now,
-                    Status = OrderStatus.Выполняется
+                    Status = OrderStatus.Выполняется,
+                    ClientId = order.ClientId
                 });
 
                 MailLogic.MailSendAsync(new MailSendInfo
@@ -154,7 +154,8 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
                 Status = OrderStatus.Оплачен,
-                ClientId = order.ClientId
+                ClientId = order.ClientId,
+                ImplementerId = order.ImplementerId
             });
 
             MailLogic.MailSendAsync(new MailSendInfo
@@ -167,6 +168,5 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 Text = $"Заказ №{order.Id} оплачен."
             });
         }
-
     }
 }
