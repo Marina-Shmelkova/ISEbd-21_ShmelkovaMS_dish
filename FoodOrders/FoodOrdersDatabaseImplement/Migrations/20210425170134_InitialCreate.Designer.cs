@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodOrdersDatabaseImplement.Migrations
 {
     [DbContext(typeof(FoodOrdersDatabase))]
-    [Migration("20210410155457_initialcreate")]
-    partial class initialcreate
+    [Migration("20210425170134_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -188,7 +188,7 @@ namespace FoodOrdersDatabaseImplement.Migrations
             modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.StorehouseComponent", b =>
                 {
                     b.HasOne("FoodOrdersDatabaseImplement.Models.Component", "Component")
-                        .WithMany()
+                        .WithMany("StorehouseComponent")
                         .HasForeignKey("ComponentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

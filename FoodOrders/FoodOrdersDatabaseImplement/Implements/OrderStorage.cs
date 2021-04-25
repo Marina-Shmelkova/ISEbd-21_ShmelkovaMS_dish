@@ -19,7 +19,7 @@ namespace FoodOrdersDatabaseImplement.Implements
                 return context.Orders.Include(rec => rec.Dish).Select(rec => new OrderViewModel
                 {
                     Id = rec.Id,
-                    DishName = context.Dishs.FirstOrDefault(r => r.Id == rec.DishId).DishName,
+                    DishName = rec.Dish.DishName,
                     DishId = rec.DishId,
                     Count = rec.Count,
                     Sum = rec.Sum,
@@ -36,33 +36,16 @@ namespace FoodOrdersDatabaseImplement.Implements
             {
                 return null;
             }
-            if (model.DateFrom != null && model.DateTo != null)
-            {
-                using (var context = new FoodOrdersDatabase())
-                {
-                    return context.Orders
-                    .Where(rec => rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo)
-                    .Select(rec => new OrderViewModel
-                    {
-                        Id = rec.Id,
-                        DishName = context.Dishs.FirstOrDefault(r => r.Id == rec.DishId).DishName,
-                        DishId = rec.DishId,
-                        Count = rec.Count,
-                        Sum = rec.Sum,
-                        Status = rec.Status,
-                        DateCreate = rec.DateCreate,
-                        DateImplement = rec.DateImplement
-                    })
-                    .ToList();
-                }
-            }
             using (var context = new FoodOrdersDatabase())
             {
-                return context.Orders
-                .Where(rec => rec.Id.Equals(model.Id)).Select(rec => new OrderViewModel
+                return context.Orders.Include(rec => rec.Dish)
+                .Where(rec => (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate == model.DateCreate) ||
+                (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date
+                >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date))
+                .Select(rec => new OrderViewModel
                 {
                     Id = rec.Id,
-                    DishName = context.Dishs.FirstOrDefault(r => r.Id == rec.DishId).DishName,
+                    DishName = rec.Dish.DishName,
                     DishId = rec.DishId,
                     Count = rec.Count,
                     Sum = rec.Sum,
@@ -87,7 +70,7 @@ namespace FoodOrdersDatabaseImplement.Implements
                 new OrderViewModel
                 {
                     Id = order.Id,
-                    DishName = context.Dishs.FirstOrDefault(r => r.Id == order.DishId).DishName,
+                    DishName = order.Dish.DishName,
                     DishId = order.DishId,
                     Count = order.Count,
                     Sum = order.Sum,

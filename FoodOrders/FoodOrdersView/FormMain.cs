@@ -132,8 +132,8 @@ namespace FoodOrdersView
 			form.ShowDialog();
 		}
 
-        private void списокНаборовToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+		private void списокНаборовToolStripMenuItem_Click(object sender, EventArgs e)
+		{
 			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
 			{
 				if (dialog.ShowDialog() == DialogResult.OK)
@@ -142,9 +142,38 @@ namespace FoodOrdersView
 					MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
+		}
 		private void пополнениеСкладаToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			var form = Container.Resolve<FormStorehouseRefill>();
+			form.ShowDialog();
+		}
+
+        private void списокСкладовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
+			{
+				if (dialog.ShowDialog() == DialogResult.OK)
+				{
+					_report.SaveStorehousesToWordFile(new ReportBindingModel
+					{
+						FileName = dialog.FileName
+					});
+
+					MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			}
+		}
+
+        private void блюдаПоСкладамToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormReportComponentStorehouse>();
+			form.ShowDialog();
+		}
+
+        private void списокВсехЗаказовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormReportAllOrders>();
 			form.ShowDialog();
 		}
     }

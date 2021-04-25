@@ -19,6 +19,7 @@ namespace FoodOrdersView
             var container = BuildUnityContainer();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            new UnityContainer().AddExtension(new Diagnostic());
             Application.Run(container.Resolve<FormMain>());
         }
         private static IUnityContainer BuildUnityContainer()
@@ -28,9 +29,12 @@ namespace FoodOrdersView
             currentContainer.RegisterType<IOrderStorage, OrderStorage>(new HierarchicalLifetimeManager());
             currentContainer.RegisterType<IDishStorage, DishStorage>(new HierarchicalLifetimeManager());
             currentContainer.RegisterType<IStorehouseStorage, StorehouseStorage>(new HierarchicalLifetimeManager());
+
             currentContainer.RegisterType<ComponentLogic>(new HierarchicalLifetimeManager());
             currentContainer.RegisterType<OrderLogic>(new HierarchicalLifetimeManager());
             currentContainer.RegisterType<DishLogic>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<StorehouseLogic>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<ReportLogic>(new HierarchicalLifetimeManager());
             return currentContainer;
         }
     }
