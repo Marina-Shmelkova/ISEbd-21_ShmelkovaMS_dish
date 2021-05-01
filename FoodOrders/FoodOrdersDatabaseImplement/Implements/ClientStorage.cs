@@ -34,7 +34,7 @@ namespace FoodOrdersDatabaseImplement.Implements
             }
             using (var context = new FoodOrdersDatabase())
             {
-                return context.Clients.Include(x => x.Order)
+                return context.Clients
                 .Where(rec => rec.Email == model.Email && rec.Password == rec.Password)
                 .Select(rec => new ClientViewModel
                 {

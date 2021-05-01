@@ -1,4 +1,5 @@
 ﻿using FoodOrdersBusinessLogic.BindingModels;
+using FoodOrdersBusinessLogic.Enums;
 using FoodOrdersBusinessLogic.Interfaces;
 using FoodOrdersBusinessLogic.ViewModels;
 using System;
@@ -27,10 +28,16 @@ namespace FoodOrdersFileImplement.Implements
             }
 
             return source.Orders
-                 .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) || (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate == model.DateCreate) ||
-                 (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date
-                 >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date))
-                 .Select(CreateModel).ToList();
+                    .Where(rec => (!model.DateFrom.HasValue && !model.DateTo.HasValue &&
+                    rec.DateCreate.Date == model.DateCreate.Date) ||
+                    (model.DateFrom.HasValue && model.DateTo.HasValue &&
+                    rec.DateCreate.Date >= model.DateFrom.Value.Date && rec.DateCreate.Date <=
+                    model.DateTo.Value.Date) ||
+                    (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
+                    (model.FreeOrders.HasValue && model.FreeOrders.Value && rec.Status == OrderStatus.Принят) ||
+                    (model.ImplementerId.HasValue && rec.ImplementerId ==
+                    model.ImplementerId && rec.Status == OrderStatus.Выполняется))
+                    .Select(CreateModel).ToList();
         }
 
         public OrderViewModel GetElement(OrderBindingModel model)
@@ -77,6 +84,7 @@ namespace FoodOrdersFileImplement.Implements
         private Order CreateModel(OrderBindingModel model, Order order)
         {
             order.ClientId = (int)model.ClientId;
+            order.ImplementerId = model.ImplementerId.Value;
             order.DishId = model.DishId;
             order.Status = model.Status;
             order.Sum = model.Sum;
@@ -88,27 +96,20 @@ namespace FoodOrdersFileImplement.Implements
 
         private OrderViewModel CreateModel(Order order)
         {
-            string dishName = null;
-
-            foreach (var dish in source.Dishs)
-            {
-                if (dish.Id == order.DishId)
-                {
-                    dishName = dish.DishName;
-                }
-            }
-
             return new OrderViewModel
             {
                 Id = order.Id,
                 ClientId = order.ClientId,
                 DishId = order.DishId,
+                ImplementerId = order.ImplementerId,
                 Status = order.Status,
                 Sum = order.Sum,
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
                 Count = order.Count,
-                DishName = dishName
+                DishName = source.Dishs.FirstOrDefault(rec => rec.Id == order.DishId)?.DishName,
+                ClientFIO = source.Clients.FirstOrDefault(rec => rec.Id == order.ClientId)?.ClientFIO,
+                ImplementerFIO = source.Implementers.FirstOrDefault(rec => rec.Id == order.ImplementerId)?.ImplementerFIO
             };
         }
     }

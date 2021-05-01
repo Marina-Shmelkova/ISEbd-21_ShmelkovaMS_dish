@@ -1,4 +1,5 @@
 ﻿using FoodOrdersBusinessLogic.BindingModels;
+using FoodOrdersBusinessLogic.Enums;
 using FoodOrdersBusinessLogic.Interfaces;
 using FoodOrdersBusinessLogic.ViewModels;
 using System;
@@ -34,17 +35,17 @@ namespace FoodOrdersListImplement
             List<OrderViewModel> result = new List<OrderViewModel>();
             foreach (var order in source.Orders)
             {
-                if (order.DishId.ToString().Contains(model.DishId.ToString()))
+                if ((!model.DateFrom.HasValue && !model.DateTo.HasValue &&
+                    order.DateCreate.Date == model.DateCreate.Date) ||
+                    (model.DateFrom.HasValue && model.DateTo.HasValue &&
+                    order.DateCreate.Date >= model.DateFrom.Value.Date && order.DateCreate.Date <=
+                    model.DateTo.Value.Date) ||
+                    (model.ClientId.HasValue && order.ClientId == model.ClientId) ||
+                    (model.FreeOrders.HasValue && model.FreeOrders.Value && order.Status == OrderStatus.Принят) ||
+                    (model.ImplementerId.HasValue && order.ImplementerId ==
+                    model.ImplementerId && order.Status == OrderStatus.Выполняется))
                 {
                     result.Add(CreateModel(order));
-                }
-            }
-            List<OrderViewModel> resultRep = new List<OrderViewModel>();
-            foreach (var order in source.Orders)
-            {
-                if (order.DateCreate >= model.DateFrom && order.DateCreate <= model.DateTo)
-                {
-                    resultRep.Add(CreateModel(order));
                 }
             }
             return result;
@@ -108,6 +109,7 @@ namespace FoodOrdersListImplement
         private Order CreateModel(OrderBindingModel model, Order order)
         {
             order.DishId = model.DishId;
+            order.ImplementerId = model.ImplementerId;
             order.Count = model.Count;
             order.Sum = model.Sum;
             order.Status = model.Status;
@@ -117,7 +119,7 @@ namespace FoodOrdersListImplement
         }
         private OrderViewModel CreateModel(Order order)
         {
-            string dishName = "";
+            string dishName = null;
             foreach (var dish in source.Dishs)
             {
                 if (dish.Id == order.DishId)
@@ -125,11 +127,32 @@ namespace FoodOrdersListImplement
                     dishName = dish.DishName;
                 }
             }
+            string clientFIO = null;
+            foreach (var client in source.Clients)
+            {
+                if (client.Id == order.ClientId)
+                {
+                    clientFIO = client.ClientFIO;
+                }
+            }
+
+            string ImplementerFIO = null;
+            foreach (var implementer in source.Implementers)
+            {
+                if (implementer.Id == order.DishId)
+                {
+                    ImplementerFIO = implementer.ImplementerFIO;
+                }
+            }
 
             return new OrderViewModel
             {
                 Id = order.Id,
+                ClientId = order.ClientId,
                 DishId = order.DishId,
+                ImplementerId = order.ImplementerId,
+                ImplementerFIO = ImplementerFIO,
+                ClientFIO = clientFIO,
                 Sum = order.Sum,
                 Count = order.Count,
                 Status = order.Status,
