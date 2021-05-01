@@ -34,8 +34,8 @@ namespace FoodOrdersRestApi
             {
                 SmtpClientHost = "smtp.gmail.com",
                 SmtpClientPort = 587,
-                MailLogin = "forprogramulgtu@gmail.com",
-                MailPassword = "ulgtu_test73",
+                MailLogin = "newprograming5@gmail.com",
+                MailPassword = "qwe123!@#qwe",
             });
             services.AddControllers().AddNewtonsoftJson();
         }
