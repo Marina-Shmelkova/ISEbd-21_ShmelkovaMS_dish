@@ -149,7 +149,7 @@ namespace FoodOrdersListImplement.Implements
                 StorehouseComponents = houseComponents
             };
         }
-        public void Restocking(StorehouseBindingModel model, int StorehouseId, int ComponentId, int Count, string ComponentName)
+       /* public void Restocking(StorehouseBindingModel model, int StorehouseId, int ComponentId, int Count, string ComponentName)
         {
             StorehouseViewModel view = GetElement(new StorehouseBindingModel
             {
@@ -175,6 +175,10 @@ namespace FoodOrdersListImplement.Implements
                 model.StorehouseComponents.Add(ComponentId, (ComponentName, Count));
             }
             Update(model);
+        }*/
+        public bool Extract(int DishCount, int DishId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
