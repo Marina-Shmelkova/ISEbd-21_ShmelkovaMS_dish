@@ -18,10 +18,12 @@ namespace FoodOrdersView
 		[Dependency]
 		public new IUnityContainer Container { get; set; }
 		private readonly OrderLogic _orderLogic;
-		public FormMain(OrderLogic orderLogic)
+		private readonly ReportLogic _report;
+		public FormMain(OrderLogic orderLogic, ReportLogic report)
 		{
 			InitializeComponent();
 			this._orderLogic = orderLogic;
+			this._report = report;
 		}
 		private void FormMain_Load(object sender, EventArgs e)
 		{
@@ -119,10 +121,60 @@ namespace FoodOrdersView
 			LoadData();
 		}
 
+        private void списокЗаказовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormReportOrders>();
+			form.ShowDialog();
+		}
+        private void наборыПоБлюдамToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormReportComponentDish>();
+			form.ShowDialog();
+		}
+
+		private void списокНаборовToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
+			{
+				if (dialog.ShowDialog() == DialogResult.OK)
+				{
+					_report.SaveDishsToWordFile(new ReportBindingModel { FileName = dialog.FileName });
+					MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			}
+		}
 		private void пополнениеСкладаToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			var form = Container.Resolve<FormStorehouseRefill>();
 			form.ShowDialog();
 		}
-	}
+
+        private void списокСкладовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
+			{
+				if (dialog.ShowDialog() == DialogResult.OK)
+				{
+					_report.SaveStorehousesToWordFile(new ReportBindingModel
+					{
+						FileName = dialog.FileName
+					});
+
+					MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			}
+		}
+
+        private void блюдаПоСкладамToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormReportComponentStorehouse>();
+			form.ShowDialog();
+		}
+
+        private void списокВсехЗаказовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormReportAllOrders>();
+			form.ShowDialog();
+		}
+    }
 }

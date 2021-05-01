@@ -31,10 +31,15 @@ namespace FoodOrdersListImplement
             {
                 return null;
             }
+
             List<OrderViewModel> result = new List<OrderViewModel>();
             foreach (var order in source.Orders)
             {
-                if (order.DishId.ToString().Contains(model.DishId.ToString()))
+                if ((!model.DateFrom.HasValue && !model.DateTo.HasValue &&
+                    order.DateCreate.Date == model.DateCreate.Date) ||
+                    (model.DateFrom.HasValue && model.DateTo.HasValue &&
+                    order.DateCreate.Date >= model.DateFrom.Value.Date && order.DateCreate.Date <=
+                    model.DateTo.Value.Date))
                 {
                     result.Add(CreateModel(order));
                 }

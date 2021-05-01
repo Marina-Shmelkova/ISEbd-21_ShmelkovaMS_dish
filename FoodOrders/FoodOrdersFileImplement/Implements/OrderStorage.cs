@@ -26,7 +26,9 @@ namespace FoodOrdersFileImplement.Implements
                 return null;
             }
             return source.Orders
-                .Where(rec => rec.DishId.ToString().Contains(model.DishId.ToString()))
+                .Where(rec => (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate == model.DateCreate) ||
+                (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date
+                >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date))
                 .Select(CreateModel).ToList();
         }
 
@@ -93,7 +95,7 @@ namespace FoodOrdersFileImplement.Implements
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
                 Count = order.Count,
-                DishName = source.Dishs.FirstOrDefault(rec => rec.Id == order.DishId).DishName
+                DishName = source.Dishs.FirstOrDefault(rec => rec.Id == order.DishId)?.DishName
             };
         }
     }

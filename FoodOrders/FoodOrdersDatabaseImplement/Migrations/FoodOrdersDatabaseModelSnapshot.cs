@@ -186,7 +186,7 @@ namespace FoodOrdersDatabaseImplement.Migrations
             modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.StorehouseComponent", b =>
                 {
                     b.HasOne("FoodOrdersDatabaseImplement.Models.Component", "Component")
-                        .WithMany()
+                        .WithMany("StorehouseComponent")
                         .HasForeignKey("ComponentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
