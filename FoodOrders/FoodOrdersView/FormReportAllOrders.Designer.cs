@@ -44,9 +44,7 @@ namespace FoodOrdersView
             // 
             // reportViewer
             // 
-            reportDataSource1.Name = "DataSetOrders";
-            reportDataSource1.Value = this.ReportAllOrdersViewModelBindingSource;
-            this.reportViewer.LocalReport.DataSources.Add(reportDataSource1);
+           
             this.reportViewer.LocalReport.ReportEmbeddedResource = "FoodOrdersView.ReportAllOrders.rdlc";
             this.reportViewer.Location = new System.Drawing.Point(12, 12);
             this.reportViewer.Name = "reportViewer";
