@@ -78,11 +78,11 @@ namespace FoodOrdersFileImplement.Implements
         {
             order.ClientId = (int)model.ClientId;
             order.DishId = model.DishId;
+            order.Count = model.Count;
             order.Status = model.Status;
             order.Sum = model.Sum;
             order.DateCreate = model.DateCreate;
-            order.DateImplement = model.DateImplement;
-            order.Count = model.Count;
+            order.DateImplement = model.DateImplement;      
             return order;
         }
 

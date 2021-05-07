@@ -5,11 +5,13 @@ using System.Text;
 
 namespace FoodOrdersBusinessLogic.HelperModels
 {
-    class ExcelInfo
+    public class WordInfoStorehouse
     {
+
         public string FileName { get; set; }
+
         public string Title { get; set; }
-        public List<ReportComponentDishViewModel> ComponentDishs { get; set; }
-        public List<ReportComponentStorehouseViewModel> ComponentStorehouses { get; set; }
+
+        public List<StorehouseViewModel> Storehouses { get; set; }
     }
 }

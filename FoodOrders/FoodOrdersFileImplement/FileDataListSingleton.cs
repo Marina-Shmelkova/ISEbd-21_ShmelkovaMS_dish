@@ -14,20 +14,27 @@ namespace FoodOrdersFileImplement.Implements
 	public class FileDataListSingleton
 	{
 		private static FileDataListSingleton instance;
+
 		private readonly string ComponentFileName = "Component.xml";
+
 		private readonly string OrderFileName = "Order.xml";
+
 		private readonly string DishFileName = "Dish.xml";
 		private readonly string ClientFileName = "Client.xml";
+
+		private readonly string StorehouseFileName = "Storehouse.xml";
 		public List<Component> Components { get; set; }
 		public List<Order> Orders { get; set; }
 		public List<Dish> Dishs { get; set; }
 		public List<Client> Clients { get; set; }
+		public List<Storehouse> Storehouses { get; set; }
 		private FileDataListSingleton()
 		{
 			Components = LoadComponents();
 			Orders = LoadOrders();
 			Dishs = LoadDishs();
 			Clients = LoadClients();
+			Storehouses = LoadStorehouses();
 		}
 		public static FileDataListSingleton GetInstance()
 		{
@@ -43,6 +50,7 @@ namespace FoodOrdersFileImplement.Implements
 			SaveOrders();
 			SaveDishs();
 			SaveClients();
+			SaveStorehouses();
 		}
 		private List<Component> LoadComponents()
 		{
@@ -69,10 +77,10 @@ namespace FoodOrdersFileImplement.Implements
 			{
 				XDocument xDocument = XDocument.Load(OrderFileName);
 				var xElements = xDocument.Root.Elements("Order").ToList();
-
 				foreach (var elem in xElements)
 				{
 					OrderStatus status = 0;
+					
 					switch (elem.Element("Status").Value)
 					{
 						case "Принят":
@@ -88,7 +96,11 @@ namespace FoodOrdersFileImplement.Implements
 							status = OrderStatus.Оплачен;
 							break;
 					}
-
+					DateTime? dateImplement = null;
+					if (elem.Element("DateImplement").Value != "")
+					{
+						dateImplement = Convert.ToDateTime(elem.Element("DateImplement").Value);
+					}
 					list.Add(new Order
 					{
 						Id = Convert.ToInt32(elem.Attribute("Id").Value),
@@ -98,7 +110,7 @@ namespace FoodOrdersFileImplement.Implements
 						Sum = Convert.ToDecimal(elem.Element("Sum").Value),
 						Status = status,
 						DateCreate = Convert.ToDateTime(elem.Element("DateCreate").Value),
-						DateImplement = Convert.ToDateTime(elem.Element("DateImplement").Value)
+						DateImplement = dateImplement
 					});
 				}
 			}
@@ -116,7 +128,8 @@ namespace FoodOrdersFileImplement.Implements
 					var prodComp = new Dictionary<int, int>();
 					foreach (var component in elem.Element("DishComponents").Elements("DishComponent").ToList())
 					{
-						prodComp.Add(Convert.ToInt32(component.Element("Key").Value), Convert.ToInt32(component.Element("Value").Value));
+						prodComp.Add(Convert.ToInt32(component.Element("Key").Value), 
+						Convert.ToInt32(component.Element("Value").Value));
 					}
 					list.Add(new Dish
 					{
@@ -164,6 +177,34 @@ namespace FoodOrdersFileImplement.Implements
 				xDocument.Save(ComponentFileName);
 			}
 		}
+		private List<Storehouse> LoadStorehouses()
+		{
+			var list = new List<Storehouse>();
+			if (File.Exists(StorehouseFileName))
+			{
+				XDocument xDocument = XDocument.Load(StorehouseFileName);
+				var xElements = xDocument.Root.Elements("Storehouse").ToList();
+				foreach (var elem in xElements)
+				{
+					var houseComp = new Dictionary<int, int>();
+					foreach (var component in
+					elem.Element("StorehouseComponents").Elements("StorehouseComponent").ToList())
+					{
+						houseComp.Add(Convert.ToInt32(component.Element("Key").Value),
+						Convert.ToInt32(component.Element("Value").Value));
+					}
+					list.Add(new Storehouse
+					{
+						Id = Convert.ToInt32(elem.Attribute("Id").Value),
+						StorehouseName = elem.Element("StorehouseName").Value,
+						Responsible = elem.Element("Responsible").Value,
+						DateCreate = Convert.ToDateTime(elem.Element("DateCreate").Value),
+						StorehouseComponents = houseComp
+					});
+				}
+			}
+			return list;
+		}
 		private void SaveOrders()
 		{
 			if (Orders != null)
@@ -196,7 +237,7 @@ namespace FoodOrdersFileImplement.Implements
 					var compElement = new XElement("DishComponents");
 					foreach (var component in dish.DishComponents)
 					{
-						compElement.Add(new XElement("DishtComponent",
+						compElement.Add(new XElement("DishComponent",
 						new XElement("Key", component.Key),
 						new XElement("Value", component.Value)));
 					}
@@ -208,6 +249,31 @@ namespace FoodOrdersFileImplement.Implements
 				}
 				XDocument xDocument = new XDocument(xElement);
 				xDocument.Save(DishFileName);
+			}
+		}
+		private void SaveStorehouses()
+		{
+			if (Storehouses != null)
+			{
+				var xElement = new XElement("Storehouses");
+				foreach (var house in Storehouses)
+				{
+					var compElement = new XElement("StorehouseComponents");
+					foreach (var component in house.StorehouseComponents)
+					{
+						compElement.Add(new XElement("StorehouseComponent",
+						new XElement("Key", component.Key),
+						new XElement("Value", component.Value)));
+					}
+					xElement.Add(new XElement("Storehouse",
+					new XAttribute("Id", house.Id),
+					new XElement("StorehouseName", house.StorehouseName),
+					new XElement("Responsible", house.Responsible),
+					new XElement("DateCreate", house.DateCreate),
+					compElement));
+				}
+				XDocument xDocument = new XDocument(xElement);
+				xDocument.Save(StorehouseFileName);
 			}
 		}
 		private void SaveClients()

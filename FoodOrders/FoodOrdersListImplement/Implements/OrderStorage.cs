@@ -116,7 +116,7 @@ namespace FoodOrdersListImplement
         }
         private OrderViewModel CreateModel(Order order)
         {
-            string dishName = "";
+            string dishName = null;
             foreach (var dish in source.Dishs)
             {
                 if (dish.Id == order.DishId)

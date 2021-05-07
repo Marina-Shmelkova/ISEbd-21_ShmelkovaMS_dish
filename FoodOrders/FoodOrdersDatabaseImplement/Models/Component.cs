@@ -17,6 +17,8 @@ namespace FoodOrdersDatabaseImplement.Models
 
         [ForeignKey("ComponentId")]
         public virtual List<DishComponent> DishComponent { get; set; }
+        [ForeignKey("ComponentId")]
+        public virtual List<StorehouseComponent> StorehouseComponent { get; set; }
     }
 
 }
