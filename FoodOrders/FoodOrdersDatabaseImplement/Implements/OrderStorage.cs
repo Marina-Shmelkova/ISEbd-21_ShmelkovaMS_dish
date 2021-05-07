@@ -16,10 +16,10 @@ namespace FoodOrdersDatabaseImplement.Implements
         { 
                 using (var context = new FoodOrdersDatabase())
                 {
-                    return context.Orders.Select(rec => new OrderViewModel
+                    return context.Orders.Include(rec => rec.Dish).Include(rec => rec.Client).Select(rec => new OrderViewModel
                     {
                         Id = rec.Id,
-                        DishName = context.Dishs.Include(x => x.Order).FirstOrDefault(r => r.Id == rec.DishId).DishName,
+                        DishName = rec.Dish.DishName,
                         DishId = rec.DishId,
                         Count = rec.Count,
                         Sum = rec.Sum,
@@ -27,7 +27,7 @@ namespace FoodOrdersDatabaseImplement.Implements
                         DateCreate = rec.DateCreate,
                         DateImplement = rec.DateImplement,
                         ClientId = rec.ClientId,
-                        ClientFIO = context.Clients.FirstOrDefault(x => x.Id == rec.ClientId).ClientFIO
+                        ClientFIO = rec.Client.ClientFIO
                     })
                     .ToList();
                 }
@@ -42,24 +42,25 @@ namespace FoodOrdersDatabaseImplement.Implements
 
                 using (var context = new FoodOrdersDatabase())
                 {
-                    return context.Orders
-                    .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) || (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate == model.DateCreate) ||
-                    (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date
-                    >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date))
-                    .Select(rec => new OrderViewModel
-                    {
-                        Id = rec.Id,
-                        DishName = context.Dishs.Include(x => x.Order).FirstOrDefault(r => r.Id == rec.DishId).DishName,
-                        DishId = rec.DishId,
-                        Count = rec.Count,
-                        Sum = rec.Sum,
-                        Status = rec.Status,
-                        DateCreate = rec.DateCreate,
-                        DateImplement = rec.DateImplement,
-                        ClientId = rec.ClientId
-                    })
-                    .ToList();
-                }
+                return context.Orders.Include(rec => rec.Dish).Include(rec => rec.Client)
+                .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) || (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate == model.DateCreate) ||
+                (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date
+                >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date))
+                .Select(rec => new OrderViewModel
+                {
+                    Id = rec.Id,
+                    DishName = rec.Dish.DishName,
+                    DishId = rec.DishId,
+                    Count = rec.Count,
+                    Sum = rec.Sum,
+                    Status = rec.Status,
+                    DateCreate = rec.DateCreate,
+                    DateImplement = rec.DateImplement,
+                    ClientId = rec.ClientId,
+                    ClientFIO = rec.Client.ClientFIO
+                })
+                .ToList();
+            }
             }
 
             public OrderViewModel GetElement(OrderBindingModel model)
@@ -70,20 +71,21 @@ namespace FoodOrdersDatabaseImplement.Implements
                 }
                 using (var context = new FoodOrdersDatabase())
                 {
-                    var order = context.Orders
-                    .FirstOrDefault(rec => rec.Id == model.Id);
+                    var order = context.Orders.Include(rec => rec.Dish).Include(rec => rec.Client)
+                  .FirstOrDefault(rec => rec.Id == model.Id);
                     return order != null ?
                     new OrderViewModel
                     {
                         Id = order.Id,
-                        DishName = context.Dishs.Include(x => x.Order).FirstOrDefault(r => r.Id == order.DishId)?.DishName,
+                        DishName = order.Dish.DishName,
                         DishId = order.DishId,
                         Count = order.Count,
                         Sum = order.Sum,
                         Status = order.Status,
                         DateCreate = order.DateCreate,
                         DateImplement = order.DateImplement,
-                        ClientId = order.ClientId
+                        ClientId = order.ClientId,
+                        ClientFIO = order.Client.ClientFIO
                     } :
                     null;
                 }

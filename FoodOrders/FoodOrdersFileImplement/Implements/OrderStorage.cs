@@ -88,16 +88,6 @@ namespace FoodOrdersFileImplement.Implements
 
         private OrderViewModel CreateModel(Order order)
         {
-            string dishName = null;
-
-            foreach (var dish in source.Dishs)
-            {
-                if (dish.Id == order.DishId)
-                {
-                    dishName = dish.DishName;
-                }
-            }
-
             return new OrderViewModel
             {
                 Id = order.Id,
@@ -108,7 +98,8 @@ namespace FoodOrdersFileImplement.Implements
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
                 Count = order.Count,
-                DishName = dishName
+                DishName = source.Dishs.FirstOrDefault(rec => rec.Id == order.DishId)?.DishName,
+                ClientFIO = source.Clients.FirstOrDefault(rec => rec.Id == order.ClientId)?.ClientFIO
             };
         }
     }
