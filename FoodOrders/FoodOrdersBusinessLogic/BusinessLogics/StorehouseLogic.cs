@@ -51,8 +51,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         {
             var element = _houseStorage.GetElement(new StorehouseBindingModel
             {
-                Id =
-           model.Id
+                Id = model.Id
             });
             if (element == null)
             {

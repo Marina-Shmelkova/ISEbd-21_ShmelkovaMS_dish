@@ -205,13 +205,13 @@ namespace FoodOrdersDatabaseImplement.Migrations
 
             modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.Order", b =>
                 {
-                    b.HasOne("FoodOrdersDatabaseImplement.Models.Client", null)
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Client", "Client")
                         .WithMany("Order")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FoodOrdersDatabaseImplement.Models.Dish", null)
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Dish", "Dish")
                         .WithMany("Order")
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)

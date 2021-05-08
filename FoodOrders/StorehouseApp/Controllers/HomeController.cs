@@ -79,22 +79,22 @@ namespace StorehouseApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Update(int houseId)
+        public IActionResult Update(int storehouseId)
         {
-            var house = APIEmployer.GetRequest<StorehouseViewModel>($"api/storehouse/GetStorehouse?storehouseId={houseId}");
-            ViewBag.Components = house.StorehouseComponents.Values;
-            ViewBag.Name = house.StorehouseName;
-            ViewBag.Responsible = house.Responsible;
+            var storehouse = APIEmployer.GetRequest<StorehouseViewModel>($"api/storehouse/GetStorehouse?storehouseId={storehouseId}");
+            ViewBag.Components = storehouse.StorehouseComponents.Values;
+            ViewBag.Name = storehouse.StorehouseName;
+            ViewBag.Responsible = storehouse.Responsible;
             return View();
         }
 
         [HttpPost]
-        public void Update(int houseId, string name, string responsible)
+        public void Update(int storehouseId, string name, string responsible)
         {
             if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(responsible))
             {
-                var house = APIEmployer.GetRequest<StorehouseViewModel>($"api/storehouse/GetStorehouse?storehouseId={houseId}");
-                if (house == null)
+                var storehouse = APIEmployer.GetRequest<StorehouseViewModel>($"api/storehouse/GetStorehouse?storehouseId={storehouseId}");
+                if (storehouse == null)
                 {
                     return;
                 }
@@ -103,8 +103,8 @@ namespace StorehouseApp.Controllers
                     Responsible = responsible,
                     StorehouseName = name,
                     DateCreate = DateTime.Now,
-                    StorehouseComponents = house.StorehouseComponents,
-                    Id = house.Id
+                    StorehouseComponents = storehouse.StorehouseComponents,
+                    Id = storehouse.Id
                 });
                 Response.Redirect("Index");
                 return;
@@ -124,11 +124,11 @@ namespace StorehouseApp.Controllers
         }
 
         [HttpPost]
-        public void Delete(int houseId)
+        public void Delete(int storehouseId)
         {
             APIEmployer.PostRequest("api/storehouse/DeleteStorehouse", new StorehouseBindingModel
             {
-                Id = houseId
+                Id = storehouseId
             });
             Response.Redirect("Index");
         }
@@ -146,11 +146,11 @@ namespace StorehouseApp.Controllers
         }
 
         [HttpPost]
-        public void Restoking(int houseId, int componentId, int count)
+        public void Restoking(int storehouseId, int componentId, int count)
         {
-            APIEmployer.PostRequest("api/storehouse/Restoking", new StorehouseRestokingBindingModel
+            APIEmployer.PostRequest("api/storehouse/Restocking", new StorehouseRestokingBindingModel
             {
-                StorehouseId = houseId,
+                StorehouseId = storehouseId,
                 ComponentId = componentId,
                 Count = count
             });

@@ -149,33 +149,7 @@ namespace FoodOrdersListImplement.Implements
                 StorehouseComponents = houseComponents
             };
         }
-       /* public void Restocking(StorehouseBindingModel model, int StorehouseId, int ComponentId, int Count, string ComponentName)
-        {
-            StorehouseViewModel view = GetElement(new StorehouseBindingModel
-            {
-                Id = StorehouseId
-            });
-
-            if (view != null)
-            {
-                model.StorehouseComponents = view.StorehouseComponents;
-                model.DateCreate = view.DateCreate;
-                model.Id = view.Id;
-                model.Responsible = view.Responsible;
-                model.StorehouseName = view.StorehouseName;
-            }
-
-            if (model.StorehouseComponents.ContainsKey(ComponentId))
-            {
-                int count = model.StorehouseComponents[ComponentId].Item2;
-                model.StorehouseComponents[ComponentId] = (ComponentName, count + Count);
-            }
-            else
-            {
-                model.StorehouseComponents.Add(ComponentId, (ComponentName, Count));
-            }
-            Update(model);
-        }*/
+      
         public bool Extract(int DishCount, int DishId)
         {
             throw new NotImplementedException();

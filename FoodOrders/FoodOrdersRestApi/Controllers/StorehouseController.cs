@@ -12,32 +12,32 @@ namespace FoodOrdersRestApi.Controllers
     [ApiController]
     public class StorehouseController : Controller
     {
-        private readonly StorehouseLogic _house;
+        private readonly StorehouseLogic _storehouse;
 
         private readonly ComponentLogic _component;
 
         public StorehouseController(StorehouseLogic houseLogic, ComponentLogic componentLogic)
         {
-            _house = houseLogic;
+            _storehouse = houseLogic;
             _component = componentLogic;
         }
         [HttpGet]
-        public List<StorehouseViewModel> GetStorehouseList() => _house.Read(null)?.ToList();
+        public List<StorehouseViewModel> GetStorehouseList() => _storehouse.Read(null)?.ToList();
 
         [HttpPost]
         public void CreateOrUpdateStorehouse(StorehouseBindingModel model)
-            => _house.CreateOrUpdate(model);
+            => _storehouse.CreateOrUpdate(model);
 
         [HttpPost]
-        public void DeleteStorehouse(StorehouseBindingModel model) => _house.Delete(model);
+        public void DeleteStorehouse(StorehouseBindingModel model) => _storehouse.Delete(model);
 
         [HttpPost]
-        public void Restoking(StorehouseRestokingBindingModel model)
-            => _house.Restocking(model);
+        public void Restocking(StorehouseRestokingBindingModel model)
+            => _storehouse.Restocking(model);
 
         [HttpGet]
-        public StorehouseViewModel GetStorehouse(int houseId)
-            => _house.Read(new StorehouseBindingModel { Id = houseId })?[0];
+        public StorehouseViewModel GetStorehouse(int storehouseId)
+            => _storehouse.Read(new StorehouseBindingModel { Id = storehouseId })?[0];
 
         [HttpGet]
         public List<ComponentViewModel> GetComponentList()
