@@ -24,9 +24,13 @@ namespace FoodOrdersRestApi
             services.AddTransient<IClientStorage, ClientStorage>();
             services.AddTransient<IOrderStorage, OrderStorage>();
             services.AddTransient<IDishStorage, DishStorage>();
+            services.AddTransient<IStorehouseStorage, StorehouseStorage>();
+            services.AddTransient<IComponentStorage, ComponentStorage>();
             services.AddTransient<OrderLogic>();
             services.AddTransient<ClientLogic>();
             services.AddTransient<DishLogic>();
+            services.AddTransient<StorehouseLogic>();
+            services.AddTransient<ComponentLogic>();
             services.AddControllers().AddNewtonsoftJson();
         }
 

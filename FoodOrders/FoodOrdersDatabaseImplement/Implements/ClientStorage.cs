@@ -55,7 +55,7 @@ namespace FoodOrdersDatabaseImplement.Implements
             }
             using (var context = new FoodOrdersDatabase())
             {
-                var client = context.Clients.Include(x => x.Order)
+                var client = context.Clients
                 .FirstOrDefault(rec => rec.Email == model.Email ||
                 rec.Id == model.Id);
                 return client != null ?

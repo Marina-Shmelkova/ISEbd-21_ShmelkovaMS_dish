@@ -32,6 +32,7 @@ namespace FoodOrdersListImplement
             {
                 return null;
             }
+
             List<OrderViewModel> result = new List<OrderViewModel>();
             foreach (var order in source.Orders)
             {
@@ -110,6 +111,7 @@ namespace FoodOrdersListImplement
         {
             order.DishId = model.DishId;
             order.ImplementerId = model.ImplementerId;
+            order.ClientId = (int)model.ClientId;
             order.Count = model.Count;
             order.Sum = model.Sum;
             order.Status = model.Status;

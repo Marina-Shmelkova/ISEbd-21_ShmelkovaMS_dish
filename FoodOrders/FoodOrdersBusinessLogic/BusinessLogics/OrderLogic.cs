@@ -13,8 +13,11 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         private readonly IOrderStorage _orderStorage;
         private readonly object locker = new object();
         public OrderLogic(IOrderStorage orderStorage)
+        private readonly IStorehouseStorage _houseStorage;
+        public OrderLogic(IOrderStorage orderStorage, IStorehouseStorage houseStorage)
         {
             _orderStorage = orderStorage;
+            _houseStorage = houseStorage;
         }
         public List<OrderViewModel> Read(OrderBindingModel model)
         {
