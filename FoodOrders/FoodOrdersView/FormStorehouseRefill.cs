@@ -21,11 +21,26 @@ namespace FoodOrdersView
         [Dependency]
         public new IUnityContainer Container { get; set; }
         private StorehouseLogic _houseLogic;
-        public int ComponentId { get { return Convert.ToInt32(comboBoxComponent.SelectedValue); } set { comboBoxComponent.SelectedValue = value; } }
-        public int StorehouseId { get { return Convert.ToInt32(comboBoxName.SelectedValue); } set { comboBoxName.SelectedValue = value; } }
-        public int Count { get { return Convert.ToInt32(textBoxCount.Text); } set { textBoxCount.Text = value.ToString(); } }
-        StorehouseBindingModel bm = new StorehouseBindingModel();
-        public string ComponentName { get { return comboBoxComponent.Text; } }
+        public int ComponentId
+        {
+            get { return Convert.ToInt32(comboBoxComponent.SelectedValue); }
+            set { comboBoxComponent.SelectedValue = value; }
+        }
+
+        public int StorehouseId
+        {
+            get { return Convert.ToInt32(comboBoxName.SelectedValue); }
+            set { comboBoxName.SelectedValue = value; }
+        }
+
+        public int Count
+        {
+            get { return Convert.ToInt32(textBoxCount.Text); }
+            set
+            {
+                textBoxCount.Text = value.ToString();
+            }
+        }
         public FormStorehouseRefill(ComponentLogic logicC, StorehouseLogic logicS)
         {
             InitializeComponent();
@@ -64,10 +79,12 @@ namespace FoodOrdersView
                 MessageBox.Show("Выберите склад", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            _houseLogic.Restocking(new StorehouseBindingModel
+            _houseLogic.Restocking(new StorehouseRestokingBindingModel
             {
-                Id = StorehouseId
-            }, StorehouseId, ComponentId, Count);
+                StorehouseId = StorehouseId,
+                ComponentId = ComponentId,
+                Count = Count
+            });
 
             DialogResult = DialogResult.OK;
             Close();

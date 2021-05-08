@@ -212,7 +212,6 @@ namespace FoodOrdersDatabaseImplement.Migrations
                         .IsRequired();
 
                     b.HasOne("FoodOrdersDatabaseImplement.Models.Dish", null)
-                    b.HasOne("FoodOrdersDatabaseImplement.Models.Dish", "Dish")
                         .WithMany("Order")
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)

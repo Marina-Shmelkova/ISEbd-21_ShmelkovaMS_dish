@@ -182,5 +182,11 @@ namespace FoodOrdersView
 			var form = Container.Resolve<FormClients>();
 			form.ShowDialog();
 		}
+
+        private void складыToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormStorehouses>();
+			form.ShowDialog();
+		}
     }
 }

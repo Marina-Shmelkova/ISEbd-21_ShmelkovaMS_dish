@@ -25,6 +25,5 @@ namespace FoodOrdersDatabaseImplement.Models
 
         public virtual Client Client { get; set; }
 
-        public virtual Dish Dish { get; set; }
     }
 }

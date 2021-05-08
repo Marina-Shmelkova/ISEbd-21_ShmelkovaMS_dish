@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodOrdersFileImplement", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodOrdersDatabaseImplement", "FoodOrdersDatabaseImplement\FoodOrdersDatabaseImplement.csproj", "{5A472798-5552-4E19-8812-C9DDFCF51BF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodOrdersRestApi", "FoodOrdersRestApi\FoodOrdersRestApi.csproj", "{DFA481A8-8967-4881-9460-B372F2CB244F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodOrdersRestApi", "FoodOrdersRestApi\FoodOrdersRestApi.csproj", "{DFA481A8-8967-4881-9460-B372F2CB244F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodOrdersClientApp", "FoodOrdersClientApp\FoodOrdersClientApp.csproj", "{AF174E4F-DD64-4189-80B0-C0E93174EB54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodOrdersClientApp", "FoodOrdersClientApp\FoodOrdersClientApp.csproj", "{AF174E4F-DD64-4189-80B0-C0E93174EB54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorehouseApp", "StorehouseApp\StorehouseApp.csproj", "{EA51D79D-AB30-4256-8228-638E284834F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{AF174E4F-DD64-4189-80B0-C0E93174EB54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF174E4F-DD64-4189-80B0-C0E93174EB54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF174E4F-DD64-4189-80B0-C0E93174EB54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA51D79D-AB30-4256-8228-638E284834F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA51D79D-AB30-4256-8228-638E284834F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA51D79D-AB30-4256-8228-638E284834F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA51D79D-AB30-4256-8228-638E284834F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
