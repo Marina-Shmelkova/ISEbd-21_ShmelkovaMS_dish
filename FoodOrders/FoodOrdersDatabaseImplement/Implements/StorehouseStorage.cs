@@ -1,12 +1,11 @@
-﻿using FoodOrdersBusinessLogic.BindingModels;
+﻿using System;
 using FoodOrdersBusinessLogic.Interfaces;
 using FoodOrdersBusinessLogic.ViewModels;
-using FoodOrdersDatabaseImplement.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+using FoodOrdersBusinessLogic.BindingModels;
 using System.Linq;
-using System.Text;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using FoodOrdersDatabaseImplement.Models;
 
 namespace FoodOrdersDatabaseImplement.Implements
 {
@@ -93,10 +92,10 @@ namespace FoodOrdersDatabaseImplement.Implements
                 {
                     try
                     {
-                        Storehouse warehouse = CreateModel(model, new Storehouse());
-                        context.Storehouses.Add(warehouse);
+                        Storehouse storehouse = CreateModel(model, new Storehouse());
+                        context.Storehouses.Add(storehouse);
                         context.SaveChanges();
-                        CreateModel(model, warehouse, context);
+                        CreateModel(model, storehouse , context);
 
                         transaction.Commit();
                     }
@@ -201,7 +200,7 @@ namespace FoodOrdersDatabaseImplement.Implements
             return house;
         }
 
-        public bool Extract(int DishCount, int DishId)
+        public bool Extract(int DishId, int DishCount)
         {
             using (var context = new FoodOrdersDatabase())
             {
@@ -215,18 +214,18 @@ namespace FoodOrdersDatabaseImplement.Implements
                     {
                         foreach (var key in DCount.Keys.ToArray())
                         {
-                            foreach (var warehouseComponent in context.StorehouseComponents.Where(rec => rec.ComponentId == key))
+                            foreach (var storehouseComponent in context.StorehouseComponents.Where(rec => rec.ComponentId == key))
                             {
-                                if (warehouseComponent.Count > DCount[key])
+                                if (storehouseComponent.Count > DCount[key])
                                 {
-                                    warehouseComponent.Count -= DCount[key];
+                                    storehouseComponent.Count -= DCount[key];
                                     DCount[key] = 0;
                                     break;
                                 }
                                 else
                                 {
-                                    DCount[key] -= warehouseComponent.Count;
-                                    warehouseComponent.Count = 0;
+                                    DCount[key] -= storehouseComponent.Count;
+                                    storehouseComponent.Count = 0;
                                 }
                             }
                             if (DCount[key] > 0)

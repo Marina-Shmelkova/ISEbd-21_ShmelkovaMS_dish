@@ -48,18 +48,20 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         /// <param name="implementer"></param>
         /// <param name="orders"></param>
         private async void WorkerWorkAsync(ImplementerViewModel implementer,
-        List<OrderViewModel> orders)
+         List<OrderViewModel> orders)
         {
             // ищем заказы, которые уже в работе (вдруг исполнителя прервали)
             var runOrders = await Task.Run(() => _orderStorage.GetFilteredList(new
             OrderBindingModel
             { ImplementerId = implementer.Id }));
+
             var needComponentOrders = await Task.Run(() => _orderStorage.GetFilteredList(new
-           OrderBindingModel
+            OrderBindingModel
             {
                 NeedComponentOrders = true,
                 ImplementerId = implementer.Id
             }));
+
             foreach (var order in runOrders)
             {
                 // делаем работу заново
@@ -72,6 +74,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 // отдыхаем
                 Thread.Sleep(implementer.PauseTime);
             }
+
             foreach (var order in needComponentOrders)
             {
                 Thread.Sleep(implementer.WorkingTime * rnd.Next(1, 5) * order.Count);

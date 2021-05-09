@@ -60,11 +60,7 @@ namespace FoodOrdersView
 			var form = Container.Resolve<FormDishs>();
 			form.ShowDialog();
 		}
-		private void складыToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			var form = Container.Resolve<FormStorehouses>();
-			form.ShowDialog();
-		}
+		
 		private void ButtonCreateOrder_Click(object sender, EventArgs e)
 		{
 			var form = Container.Resolve<FormCreateOrder>();
@@ -169,8 +165,8 @@ namespace FoodOrdersView
 
         private void складыToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-			var form = Container.Resolve<FormStorehouses>();
-			form.ShowDialog();
+				var form = Container.Resolve<FormStorehouses>();
+				form.ShowDialog();
 		}
     }
 }

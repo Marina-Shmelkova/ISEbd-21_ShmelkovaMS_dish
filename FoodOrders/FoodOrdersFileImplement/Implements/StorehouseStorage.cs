@@ -109,7 +109,7 @@ namespace FoodOrdersFileImplement.Implements
                 StorehouseComponents = house.StorehouseComponents.ToDictionary(recPC => recPC.Key, recPC => (source.Components.FirstOrDefault(recC => recC.Id == recPC.Key)?.ComponentName, recPC.Value))
             };
         }
-        public bool Extract(int DishCount, int DishId)
+        public bool Extract(int DishId, int DishCount)
         {
             var list = GetFullList();
 
