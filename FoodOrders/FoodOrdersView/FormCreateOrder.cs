@@ -20,11 +20,13 @@ namespace FoodOrdersView
 		public new IUnityContainer Container { get; set; }
 		private readonly DishLogic _logicP;
 		private readonly OrderLogic _logicO;
-		public FormCreateOrder(DishLogic logicP, OrderLogic logicO)
+		private readonly ClientLogic _logicC;
+		public FormCreateOrder(DishLogic logicP, OrderLogic logicO, ClientLogic logicC)
 		{
 			InitializeComponent();
 			_logicP = logicP;
 			_logicO = logicO;
+			_logicC = logicC;
 		}
 		private void FormCreateOrder_Load(object sender, EventArgs e)
 		{
@@ -37,6 +39,14 @@ namespace FoodOrdersView
 					comboBoxName.ValueMember = "Id";
 					comboBoxName.DataSource = list;
 					comboBoxName.SelectedItem = null;
+				}
+				var listClients = _logicC.Read(null);
+				foreach (var component in listClients)
+				{
+					comboBoxClient.DisplayMember = "ClientFIO";
+					comboBoxClient.ValueMember = "Id";
+					comboBoxClient.DataSource = listClients;
+					comboBoxClient.SelectedItem = null;
 				}
 			}
 			catch (Exception ex)
@@ -81,10 +91,17 @@ namespace FoodOrdersView
 				MessageBox.Show("Выберите изделие", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
+			if (comboBoxClient.SelectedValue == null)
+			{
+				MessageBox.Show("Выберите клиента", "Ошибка", MessageBoxButtons.OK,
+				MessageBoxIcon.Error);
+				return;
+			}
 			try
 			{
 				_logicO.CreateOrder(new CreateOrderBindingModel
 				{
+					ClientId = Convert.ToInt32(comboBoxClient.SelectedValue),
 					DishId = Convert.ToInt32(comboBoxName.SelectedValue),
 					Count = Convert.ToInt32(textBoxCount.Text),
 					Sum = Convert.ToDecimal(textBoxSum.Text)
