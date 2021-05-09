@@ -12,7 +12,6 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
     {
         private readonly IOrderStorage _orderStorage;
         private readonly object locker = new object();
-        public OrderLogic(IOrderStorage orderStorage)
         private readonly IStorehouseStorage _houseStorage;
         public OrderLogic(IOrderStorage orderStorage, IStorehouseStorage houseStorage)
         {
@@ -64,7 +63,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 {
                     throw new Exception("У заказа уже есть исполнитель");
                 }
-                _orderStorage.Update(new OrderBindingModel
+                OrderBindingModel orderModel = new OrderBindingModel
                 {
                     Id = order.Id,
                     ImplementerId = model.ImplementerId,
@@ -75,9 +74,15 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     DateImplement = DateTime.Now,
                     Status = OrderStatus.Выполняется,
                     ClientId = order.ClientId
-                });
+                };
+                if (!_houseStorage.Extract(order.DishId, order.Count))
+                {
+                    orderModel.Status = OrderStatus.Требуются_материалы;
+                }
+                _orderStorage.Update(orderModel);
             }
         }
+        
         public void FinishOrder(ChangeStatusBindingModel model)
         {
             var order = _orderStorage.GetElement(new OrderBindingModel
@@ -88,9 +93,13 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             {
                 throw new Exception("Не найден заказ");
             }
-            if (order.Status != OrderStatus.Выполняется)
+            if (order.Status != OrderStatus.Выполняется && order.Status != OrderStatus.Требуются_материалы)
             {
-                throw new Exception("Заказ не в статусе \"Выполняется\"");
+                throw new Exception("Заказ не в статусе \"Выполняется\"или \"Требуются материалы\"");
+            }
+            if (!_houseStorage.Extract(order.DishId, order.Count))
+            {
+                return;
             }
             _orderStorage.Update(new OrderBindingModel
             {

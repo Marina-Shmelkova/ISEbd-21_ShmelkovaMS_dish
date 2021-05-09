@@ -54,9 +54,26 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             var runOrders = await Task.Run(() => _orderStorage.GetFilteredList(new
             OrderBindingModel
             { ImplementerId = implementer.Id }));
+            var needComponentOrders = await Task.Run(() => _orderStorage.GetFilteredList(new
+           OrderBindingModel
+            {
+                NeedComponentOrders = true,
+                ImplementerId = implementer.Id
+            }));
             foreach (var order in runOrders)
             {
                 // делаем работу заново
+                Thread.Sleep(implementer.WorkingTime * rnd.Next(1, 5) * order.Count);
+                _orderLogic.FinishOrder(new ChangeStatusBindingModel
+                {
+                    OrderId = order.Id,
+                    ImplementerId = implementer.Id
+                });
+                // отдыхаем
+                Thread.Sleep(implementer.PauseTime);
+            }
+            foreach (var order in needComponentOrders)
+            {
                 Thread.Sleep(implementer.WorkingTime * rnd.Next(1, 5) * order.Count);
                 _orderLogic.FinishOrder(new ChangeStatusBindingModel
                 {
