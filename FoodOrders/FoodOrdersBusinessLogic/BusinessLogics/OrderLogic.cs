@@ -55,9 +55,9 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 {
                     throw new Exception("Не найден заказ");
                 }
-                if (order.Status != OrderStatus.Принят)
+                if (order.Status != OrderStatus.Принят && order.Status != OrderStatus.Требуются_материалы)
                 {
-                    throw new Exception("Заказ не в статусе \"Принят\"");
+                    throw new Exception("Заказ не в статусе \"Принят\" или \"Требуются материалы\"");
                 }
                 if (order.ImplementerId.HasValue)
                 {
@@ -78,6 +78,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 if (!_houseStorage.Extract(order.DishId, order.Count))
                 {
                     orderModel.Status = OrderStatus.Требуются_материалы;
+                    orderModel.ImplementerId = null;
                 }
                 _orderStorage.Update(orderModel);
             }
@@ -93,13 +94,9 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             {
                 throw new Exception("Не найден заказ");
             }
-            if (order.Status != OrderStatus.Выполняется && order.Status != OrderStatus.Требуются_материалы)
+            if (order.Status != OrderStatus.Выполняется)
             {
-                throw new Exception("Заказ не в статусе \"Выполняется\"или \"Требуются материалы\"");
-            }
-            if (!_houseStorage.Extract(order.DishId, order.Count))
-            {
-                return;
+                throw new Exception("Заказ не в статусе \"Выполняется\"");
             }
             _orderStorage.Update(new OrderBindingModel
             {
