@@ -127,19 +127,27 @@ namespace FoodOrdersClientApp.Controllers
             }
             APIClient.PostRequest("api/main/createorder", new CreateOrderBindingModel
             {
-                ClientId = (int)Program.Client.Id,
+                ClientId = Program.Client.Id.Value,
                 DishId = dish,
                 Count = count,
                 Sum = sum
             });
             Response.Redirect("Index");
         }
-
+        public IActionResult Mails()
+        {
+            if (Program.Client == null)
+            {
+                return Redirect("~/Home/Enter");
+            }
+            return View(APIClient.GetRequest<List<MessageInfoViewModel>>($"api/client/GetMessages?clientId={Program.Client.Id}"));
+        }
         [HttpPost]
         public decimal Calc(decimal count, int dish)
         {
             DishViewModel prod = APIClient.GetRequest<DishViewModel>($"api/main/getdish?dishId={dish}");
             return count * prod.Price;
         }
+       
     }
 }
