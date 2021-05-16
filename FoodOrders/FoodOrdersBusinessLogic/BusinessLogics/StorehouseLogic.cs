@@ -51,8 +51,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         {
             var element = _houseStorage.GetElement(new StorehouseBindingModel
             {
-                Id =
-           model.Id
+                Id = model.Id
             });
             if (element == null)
             {
@@ -60,16 +59,16 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             }
             _houseStorage.Delete(model);
         }
-        public void Restocking(StorehouseBindingModel model, int StorehouseId, int ComponentId, int Count)
+        public void Restocking(StorehouseRestokingBindingModel model)
         {
             StorehouseViewModel house = _houseStorage.GetElement(new StorehouseBindingModel
             {
-                Id = StorehouseId
+                Id = model.StorehouseId
             });
 
             ComponentViewModel component = _componentStorage.GetElement(new ComponentBindingModel
             {
-                Id = ComponentId
+                Id = model.ComponentId
             });
 
             if (house == null)
@@ -84,14 +83,14 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
 
             Dictionary<int, (string, int)> houseComponents = house.StorehouseComponents;
 
-            if (houseComponents.ContainsKey(ComponentId))
+            if (houseComponents.ContainsKey(model.ComponentId))
             {
-                int count = houseComponents[ComponentId].Item2;
-                houseComponents[ComponentId] = (component.ComponentName, count + Count);
+                int count = houseComponents[model.ComponentId].Item2;
+                houseComponents[model.ComponentId] = (component.ComponentName, count + model.Count);
             }
             else
             {
-                houseComponents.Add(ComponentId, (component.ComponentName, Count));
+                houseComponents.Add(model.ComponentId, (component.ComponentName, model.Count));
             }
 
             _houseStorage.Update(new StorehouseBindingModel

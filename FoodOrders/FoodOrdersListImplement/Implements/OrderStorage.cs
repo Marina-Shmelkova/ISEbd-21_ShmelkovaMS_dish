@@ -39,7 +39,8 @@ namespace FoodOrdersListImplement
                     order.DateCreate.Date == model.DateCreate.Date) ||
                     (model.DateFrom.HasValue && model.DateTo.HasValue &&
                     order.DateCreate.Date >= model.DateFrom.Value.Date && order.DateCreate.Date <=
-                    model.DateTo.Value.Date))
+                    model.DateTo.Value.Date) ||
+                    (model.ClientId.HasValue && order.ClientId == model.ClientId))
                 {
                     result.Add(CreateModel(order));
                 }
@@ -105,6 +106,7 @@ namespace FoodOrdersListImplement
         private Order CreateModel(OrderBindingModel model, Order order)
         {
             order.DishId = model.DishId;
+            order.ClientId = (int)model.ClientId;
             order.Count = model.Count;
             order.Sum = model.Sum;
             order.Status = model.Status;
@@ -122,11 +124,21 @@ namespace FoodOrdersListImplement
                     dishName = dish.DishName;
                 }
             }
+            string clientFIO = null;
+            foreach (var client in source.Clients)
+            {
+                if (client.Id == order.ClientId)
+                {
+                    clientFIO = client.ClientFIO;
+                }
+            }
 
             return new OrderViewModel
             {
                 Id = order.Id,
+                ClientId = order.ClientId,
                 DishId = order.DishId,
+                ClientFIO = clientFIO,
                 Sum = order.Sum,
                 Count = order.Count,
                 Status = order.Status,

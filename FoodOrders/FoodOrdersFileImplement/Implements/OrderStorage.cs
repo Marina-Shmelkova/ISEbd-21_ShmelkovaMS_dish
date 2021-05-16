@@ -8,16 +8,16 @@ using System.Text;
 
 namespace FoodOrdersFileImplement.Implements
 {
-	public class OrderStorage : IOrderStorage
-	{
-		private readonly FileDataListSingleton source;
-		public OrderStorage()
-		{
-			source = FileDataListSingleton.GetInstance();
-		}
-		public List<OrderViewModel> GetFullList()
-		{
-			return source.Orders.Select(CreateModel).ToList();
+    public class OrderStorage : IOrderStorage
+    {
+        private readonly FileDataListSingleton source;
+        public OrderStorage()
+        {
+            source = FileDataListSingleton.GetInstance();
+        }
+        public List<OrderViewModel> GetFullList()
+        {
+            return source.Orders.Select(CreateModel).ToList();
         }
         public List<OrderViewModel> GetFilteredList(OrderBindingModel model)
         {
@@ -25,11 +25,12 @@ namespace FoodOrdersFileImplement.Implements
             {
                 return null;
             }
+
             return source.Orders
-                .Where(rec => (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate == model.DateCreate) ||
-                (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date
-                >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date))
-                .Select(CreateModel).ToList();
+                 .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) || (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate == model.DateCreate) ||
+                 (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date
+                 >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date))
+                 .Select(CreateModel).ToList();
         }
 
         public OrderViewModel GetElement(OrderBindingModel model)
@@ -75,6 +76,7 @@ namespace FoodOrdersFileImplement.Implements
 
         private Order CreateModel(OrderBindingModel model, Order order)
         {
+            order.ClientId = (int)model.ClientId;
             order.DishId = model.DishId;
             order.Count = model.Count;
             order.Status = model.Status;
@@ -89,13 +91,15 @@ namespace FoodOrdersFileImplement.Implements
             return new OrderViewModel
             {
                 Id = order.Id,
+                ClientId = order.ClientId,
                 DishId = order.DishId,
                 Status = order.Status,
                 Sum = order.Sum,
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
                 Count = order.Count,
-                DishName = source.Dishs.FirstOrDefault(rec => rec.Id == order.DishId)?.DishName
+                DishName = source.Dishs.FirstOrDefault(rec => rec.Id == order.DishId)?.DishName,
+                ClientFIO = source.Clients.FirstOrDefault(rec => rec.Id == order.ClientId)?.ClientFIO
             };
         }
     }

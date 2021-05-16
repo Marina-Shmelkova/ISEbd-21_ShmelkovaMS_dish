@@ -10,6 +10,7 @@ namespace FoodOrdersDatabaseImplement.Models
     public class Order
     {
         public int Id { get; set; }
+        public int ClientId { get; set; }
         public int DishId { get; set; }
         public virtual Dish Dish { get; set; }
         [Required]
@@ -21,5 +22,8 @@ namespace FoodOrdersDatabaseImplement.Models
         [Required]
         public DateTime DateCreate { get; set; }
         public DateTime? DateImplement { get; set; }
+
+        public virtual Client Client { get; set; }
+
     }
 }

@@ -13,33 +13,37 @@ namespace FoodOrdersDatabaseImplement.Implements
     public class OrderStorage : IOrderStorage
     {
         public List<OrderViewModel> GetFullList()
-        {
-            using (var context = new FoodOrdersDatabase())
-            {
-                return context.Orders.Include(rec => rec.Dish).Select(rec => new OrderViewModel
+        { 
+                using (var context = new FoodOrdersDatabase())
                 {
-                    Id = rec.Id,
-                    DishName = rec.Dish.DishName,
-                    DishId = rec.DishId,
-                    Count = rec.Count,
-                    Sum = rec.Sum,
-                    Status = rec.Status,
-                    DateCreate = rec.DateCreate,
-                    DateImplement = rec.DateImplement
-                })
-                .ToList();
+                    return context.Orders.Include(rec => rec.Dish).Include(rec => rec.Client).Select(rec => new OrderViewModel
+                    {
+                        Id = rec.Id,
+                        DishName = rec.Dish.DishName,
+                        DishId = rec.DishId,
+                        Count = rec.Count,
+                        Sum = rec.Sum,
+                        Status = rec.Status,
+                        DateCreate = rec.DateCreate,
+                        DateImplement = rec.DateImplement,
+                        ClientId = rec.ClientId,
+                        ClientFIO = rec.Client.ClientFIO
+                    })
+                    .ToList();
+                }
             }
-        }
-        public List<OrderViewModel> GetFilteredList(OrderBindingModel model)
-        {
-            if (model == null)
+
+            public List<OrderViewModel> GetFilteredList(OrderBindingModel model)
             {
-                return null;
-            }
-            using (var context = new FoodOrdersDatabase())
-            {
-                return context.Orders.Include(rec => rec.Dish)
-                .Where(rec => (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate == model.DateCreate) ||
+                if (model == null)
+                {
+                    return null;
+                }
+
+                using (var context = new FoodOrdersDatabase())
+                {
+                return context.Orders.Include(rec => rec.Dish).Include(rec => rec.Client)
+                .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) || (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate == model.DateCreate) ||
                 (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date
                 >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date))
                 .Select(rec => new OrderViewModel
@@ -51,84 +55,94 @@ namespace FoodOrdersDatabaseImplement.Implements
                     Sum = rec.Sum,
                     Status = rec.Status,
                     DateCreate = rec.DateCreate,
-                    DateImplement = rec.DateImplement
+                    DateImplement = rec.DateImplement,
+                    ClientId = rec.ClientId,
+                    ClientFIO = rec.Client.ClientFIO
                 })
                 .ToList();
             }
-        }
-        public OrderViewModel GetElement(OrderBindingModel model)
-        {
-            if (model == null)
-            {
-                return null;
             }
-            using (var context = new FoodOrdersDatabase())
+
+            public OrderViewModel GetElement(OrderBindingModel model)
             {
-                var order = context.Orders.Include(rec => rec.Dish)
-                .FirstOrDefault(rec => rec.Id == model.Id);
-                return order != null ?
-                new OrderViewModel
+                if (model == null)
                 {
-                    Id = order.Id,
-                    DishName = order.Dish.DishName,
-                    DishId = order.DishId,
-                    Count = order.Count,
-                    Sum = order.Sum,
-                    Status = order.Status,
-                    DateCreate = order.DateCreate,
-                    DateImplement = order.DateImplement
-                } :
-                null;
-            }
-        }
-        public void Insert(OrderBindingModel model)
-        {
-            using (var context = new FoodOrdersDatabase())
-            {
-                context.Orders.Add(CreateModel(model, new Order()));
-                context.SaveChanges();
-            }
-        }
-        public void Update(OrderBindingModel model)
-        {
-            using (var context = new FoodOrdersDatabase())
-            {
-                var element = context.Orders.FirstOrDefault(rec => rec.Id ==
-                model.Id);
-                if (element == null)
-                {
-                    throw new Exception("Элемент не найден");
+                    return null;
                 }
-                CreateModel(model, element);
-                context.SaveChanges();
-            }
-        }
-        public void Delete(OrderBindingModel model)
-        {
-            using (var context = new FoodOrdersDatabase())
-            {
-                Order element = context.Orders.FirstOrDefault(rec => rec.Id ==
-                model.Id);
-                if (element != null)
+                using (var context = new FoodOrdersDatabase())
                 {
-                    context.Orders.Remove(element);
+                    var order = context.Orders.Include(rec => rec.Dish).Include(rec => rec.Client)
+                  .FirstOrDefault(rec => rec.Id == model.Id);
+                    return order != null ?
+                    new OrderViewModel
+                    {
+                        Id = order.Id,
+                        DishName = order.Dish.DishName,
+                        DishId = order.DishId,
+                        Count = order.Count,
+                        Sum = order.Sum,
+                        Status = order.Status,
+                        DateCreate = order.DateCreate,
+                        DateImplement = order.DateImplement,
+                        ClientId = order.ClientId,
+                        ClientFIO = order.Client.ClientFIO
+                    } :
+                    null;
+                }
+            }
+
+            public void Insert(OrderBindingModel model)
+            {
+                using (var context = new FoodOrdersDatabase())
+                {
+                    context.Orders.Add(CreateModel(model, new Order()));
                     context.SaveChanges();
                 }
-                else
+            }
+
+            public void Update(OrderBindingModel model)
+            {
+                using (var context = new FoodOrdersDatabase())
                 {
-                    throw new Exception("Элемент не найден");
+                    var element = context.Orders.FirstOrDefault(rec => rec.Id ==
+                    model.Id);
+                    if (element == null)
+                    {
+                        throw new Exception("Элемент не найден");
+                    }
+                    CreateModel(model, element);
+                    context.SaveChanges();
                 }
             }
+
+            public void Delete(OrderBindingModel model)
+            {
+                using (var context = new FoodOrdersDatabase())
+                {
+                    Order element = context.Orders.FirstOrDefault(rec => rec.Id ==
+                    model.Id);
+                    if (element != null)
+                    {
+                        context.Orders.Remove(element);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new Exception("Элемент не найден");
+                    }
+                }
+            }
+
+            private Order CreateModel(OrderBindingModel model, Order order)
+            {
+                order.DishId = model.DishId;
+                order.Count = model.Count;
+                order.Sum = model.Sum;
+                order.Status = model.Status;
+                order.DateCreate = model.DateCreate;
+                order.DateImplement = model.DateImplement;
+                order.ClientId = (int)model.ClientId;
+                return order;
+            }
         }
-        private Order CreateModel(OrderBindingModel model, Order order)
-        {
-            order.DishId = model.DishId;
-            order.Count = model.Count;
-            order.Sum = model.Sum;
-            order.Status = model.Status;
-            order.DateCreate = model.DateCreate;
-            order.DateImplement = model.DateImplement;
-            return order;
-        }
-    }
 }

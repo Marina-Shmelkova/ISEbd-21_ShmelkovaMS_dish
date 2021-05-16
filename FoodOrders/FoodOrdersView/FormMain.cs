@@ -39,7 +39,7 @@ namespace FoodOrdersView
 					dataGridView.DataSource = list;
 					dataGridView.Columns[0].Visible = false;
 					dataGridView.Columns[1].Visible = false;
-					dataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+					dataGridView.Columns[2].Visible = false;
 				}
 			}
 			catch (Exception ex)
@@ -174,6 +174,18 @@ namespace FoodOrdersView
         private void списокВсехЗаказовToolStripMenuItem_Click(object sender, EventArgs e)
         {
 			var form = Container.Resolve<FormReportAllOrders>();
+			form.ShowDialog();
+		}
+
+        private void клиентыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormClients>();
+			form.ShowDialog();
+		}
+
+        private void складыToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+			var form = Container.Resolve<FormStorehouses>();
 			form.ShowDialog();
 		}
     }
