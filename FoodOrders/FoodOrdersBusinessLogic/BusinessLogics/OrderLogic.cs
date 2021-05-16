@@ -84,6 +84,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     DateImplement = DateTime.Now,
                     Status = OrderStatus.Выполняется,
                     ClientId = order.ClientId
+
                 });
 
                 MailLogic.MailSendAsync(new MailSendInfo
@@ -94,6 +95,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     })?.Email,
                     Subject = $"Заказ №{order.Id}",
                     Text = $"Заказ №{order.Id} передан в работу."
+
                 });
             }
         }
