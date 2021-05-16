@@ -150,7 +150,7 @@ namespace FoodOrdersListImplement.Implements
             };
         }
       
-        public bool Extract(int DishCount, int DishId)
+        public bool Extract(int DishId, int DishCount)
         {
             throw new NotImplementedException();
         }

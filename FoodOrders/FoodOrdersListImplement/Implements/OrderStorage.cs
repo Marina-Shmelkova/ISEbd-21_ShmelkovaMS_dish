@@ -1,4 +1,5 @@
 ﻿using FoodOrdersBusinessLogic.BindingModels;
+using FoodOrdersBusinessLogic.Enums;
 using FoodOrdersBusinessLogic.Interfaces;
 using FoodOrdersBusinessLogic.ViewModels;
 using System;
@@ -40,7 +41,11 @@ namespace FoodOrdersListImplement
                     (model.DateFrom.HasValue && model.DateTo.HasValue &&
                     order.DateCreate.Date >= model.DateFrom.Value.Date && order.DateCreate.Date <=
                     model.DateTo.Value.Date) ||
-                    (model.ClientId.HasValue && order.ClientId == model.ClientId))
+                    (model.ClientId.HasValue && order.ClientId == model.ClientId) ||
+                    (model.FreeOrders.HasValue && model.FreeOrders.Value && order.Status == OrderStatus.Принят) ||
+                    (model.ImplementerId.HasValue && order.ImplementerId ==
+                    model.ImplementerId && order.Status == OrderStatus.Выполняется) ||
+                    (model.NeedComponentOrders.HasValue && model.NeedComponentOrders.Value && order.Status == OrderStatus.Требуются_материалы))
                 {
                     result.Add(CreateModel(order));
                 }
@@ -106,6 +111,7 @@ namespace FoodOrdersListImplement
         private Order CreateModel(OrderBindingModel model, Order order)
         {
             order.DishId = model.DishId;
+            order.ImplementerId = model.ImplementerId;
             order.ClientId = (int)model.ClientId;
             order.Count = model.Count;
             order.Sum = model.Sum;
@@ -133,11 +139,22 @@ namespace FoodOrdersListImplement
                 }
             }
 
+            string ImplementerFIO = null;
+            foreach (var implementer in source.Implementers)
+            {
+                if (implementer.Id == order.DishId)
+                {
+                    ImplementerFIO = implementer.ImplementerFIO;
+                }
+            }
+
             return new OrderViewModel
             {
                 Id = order.Id,
                 ClientId = order.ClientId,
                 DishId = order.DishId,
+                ImplementerId = order.ImplementerId,
+                ImplementerFIO = ImplementerFIO,
                 ClientFIO = clientFIO,
                 Sum = order.Sum,
                 Count = order.Count,

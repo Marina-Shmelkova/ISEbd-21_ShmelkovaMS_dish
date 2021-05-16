@@ -41,7 +41,7 @@ namespace FoodOrdersView
                 MessageBoxIcon.Error);
             }
         }
-      
+
         private void ButtonDel_Click(object sender, EventArgs e)
         {
             if (dataGridView.SelectedRows.Count == 1)

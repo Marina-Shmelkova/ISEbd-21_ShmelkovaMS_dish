@@ -1,15 +1,8 @@
 ﻿using FoodOrdersBusinessLogic.BindingModels;
 using FoodOrdersBusinessLogic.BusinessLogics;
 using FoodOrdersBusinessLogic.ViewModels;
-using FoodOrdersDatabaseImplement.Implements;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Unity;
 
@@ -86,7 +79,8 @@ namespace FoodOrdersView
                 Count = Count
             });
 
-            DialogResult = DialogResult.OK;
+            MessageBox.Show("Склад пополнен", "Информация", MessageBoxButtons.OK,
+             MessageBoxIcon.Information);
             Close();
         }
 

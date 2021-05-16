@@ -13,6 +13,9 @@ namespace FoodOrdersDatabaseImplement.Models
         public int ClientId { get; set; }
         public int DishId { get; set; }
         public virtual Dish Dish { get; set; }
+        public virtual Client Client { get; set; }
+        public Implementer Implementer { get; set; }
+        public int? ImplementerId { get; set; }
         [Required]
         public int Count { get; set; }
         [Required]
@@ -22,8 +25,5 @@ namespace FoodOrdersDatabaseImplement.Models
         [Required]
         public DateTime DateCreate { get; set; }
         public DateTime? DateImplement { get; set; }
-
-        public virtual Client Client { get; set; }
-
     }
 }

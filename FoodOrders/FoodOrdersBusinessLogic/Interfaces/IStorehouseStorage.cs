@@ -14,6 +14,6 @@ namespace FoodOrdersBusinessLogic.Interfaces
         void Insert(StorehouseBindingModel model);
         void Update(StorehouseBindingModel model);
         void Delete(StorehouseBindingModel model);
-        bool Extract(int DishCount, int DishId);
+        bool Extract(int DishId, int DishCount);
     }
 }

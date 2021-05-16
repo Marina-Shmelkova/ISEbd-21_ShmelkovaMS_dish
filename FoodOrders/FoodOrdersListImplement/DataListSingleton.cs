@@ -15,12 +15,14 @@ namespace FoodOrdersListImplement
 		public List<Dish> Dishs { get; set; }
 		public List<Storehouse> Storehouses { get; set; }
 		public List<Client> Clients { get; set; }
+		public List<Implementer> Implementers { get; set; }
 		private DataListSingleton()
 		{
 			Components = new List<Component>();
 			Orders = new List<Order>();
 			Dishs = new List<Dish>();
 			Clients = new List<Client>();
+			Implementers = new List<Implementer>();
 			Storehouses = new List<Storehouse>();
 		}
 		public static DataListSingleton GetInstance()
