@@ -31,8 +31,11 @@ namespace FoodOrdersRestApi.Controllers
         { Email = login, Password = password })?[0];
 
         [HttpGet]
-        public List<MessageInfoViewModel> GetMessages(int clientId) =>
-            _mailLogic.Read(new MessageInfoBindingModel { ClientId = clientId });
+        public List<MessageInfoViewModel> GetMessages(int clientId, int pageNumber) => _mailLogic.Read(new MessageInfoBindingModel
+        {
+            ClientId = clientId,
+            PageNumber = pageNumber
+        });
 
         [HttpPost]
         public void Register(ClientBindingModel model)

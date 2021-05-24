@@ -23,5 +23,8 @@ namespace FoodOrdersBusinessLogic.BindingModels
         public string Body { get; set; }
         [DataMember]
         public DateTime DateDelivery { get; set; }
+
+        [DataMember]
+        public int? PageNumber { get; set; }
     }
 }

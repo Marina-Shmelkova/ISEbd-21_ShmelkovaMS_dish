@@ -12,7 +12,7 @@ namespace FoodOrdersDatabaseImplement
         {
             if (optionsBuilder.IsConfigured == false)
             {
-                optionsBuilder.UseSqlServer(@"Data Source=WIN-05LVFLG5M7P;Initial Catalog=FoodOrdersDatabase3;Integrated Security=True;MultipleActiveResultSets=True;");
+                optionsBuilder.UseSqlServer(@"Data Source=WIN-05LVFLG5M7P;Initial Catalog=FoodOrdersDatabase2;Integrated Security=True;MultipleActiveResultSets=True;");
             }
             base.OnConfiguring(optionsBuilder);
         }

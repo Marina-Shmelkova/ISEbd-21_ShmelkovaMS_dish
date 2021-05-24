@@ -11,6 +11,7 @@ namespace FoodOrdersDatabaseImplement.Implements
 {
     public class MessageInfoStorage : IMessageInfoStorage
     {
+        private readonly int stringsOnPage = 6;
         public List<MessageInfoViewModel> GetFullList()
         {
             using (var context = new FoodOrdersDatabase())
@@ -35,12 +36,22 @@ namespace FoodOrdersDatabaseImplement.Implements
             }
             using (var context = new FoodOrdersDatabase())
             {
-                return context.MessageInfoes
-                .Where(rec => (model.ClientId.HasValue && rec.ClientId ==
-                model.ClientId) ||
-                (!model.ClientId.HasValue && rec.DateDelivery.Date ==
-                model.DateDelivery.Date))
-                .Select(rec => new MessageInfoViewModel
+                var messageInfoes = context.MessageInfoes
+                       .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
+                       (!model.ClientId.HasValue && rec.DateDelivery.Date == model.DateDelivery.Date) ||
+                       (!model.ClientId.HasValue && model.PageNumber.HasValue) ||
+                       (model.ClientId.HasValue && rec.ClientId == model.ClientId && model.PageNumber.HasValue));
+
+                if (model.PageNumber.HasValue)
+                {
+                    if(model.PageNumber.Value == 0)
+                    {
+                        model.PageNumber = 1;
+                    }
+                    messageInfoes = messageInfoes.Skip(stringsOnPage * (model.PageNumber.Value - 1))
+                        .Take(stringsOnPage);
+                }
+                return messageInfoes.Select(rec => new MessageInfoViewModel
                 {
                     MessageId = rec.MessageId,
                     SenderName = rec.SenderName,

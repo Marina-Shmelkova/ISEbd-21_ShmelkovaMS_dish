@@ -30,6 +30,8 @@ namespace FoodOrdersRestApi
             services.AddTransient<IComponentStorage, ComponentStorage>();
             services.AddTransient<OrderLogic>();
             services.AddTransient<ClientLogic>();
+            services.AddTransient<ComponentLogic>();
+            services.AddTransient<StorehouseLogic>();
             services.AddTransient<DishLogic>();
             services.AddTransient<MailLogic>();
             MailLogic.MailConfig(new MailConfig

@@ -15,10 +15,11 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         private readonly IClientStorage _clientStorage;
         private readonly object locker = new object();
         private readonly IStorehouseStorage _houseStorage;
-        public OrderLogic(IOrderStorage orderStorage, IStorehouseStorage houseStorage)
+        public OrderLogic(IOrderStorage orderStorage, IStorehouseStorage houseStorage,IClientStorage clientStorage)
         {
             _orderStorage = orderStorage;
             _clientStorage = clientStorage;
+            _houseStorage = houseStorage;
         }
         public List<OrderViewModel> Read(OrderBindingModel model)
         {
@@ -85,8 +86,13 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     DateImplement = DateTime.Now,
                     Status = OrderStatus.Выполняется,
                     ClientId = order.ClientId
-                });
-
+                };
+                if (!_houseStorage.Extract(order.DishId, order.Count))
+                {
+                    orderModel.Status = OrderStatus.Требуются_материалы;
+                    orderModel.ImplementerId = null;
+                }
+                _orderStorage.Update(orderModel);
                 MailLogic.MailSendAsync(new MailSendInfo
                 {
                     MailAddress = _clientStorage.GetElement(new ClientBindingModel
@@ -96,15 +102,6 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     Subject = $"Заказ №{order.Id}",
                     Text = $"Заказ №{order.Id} передан в работу."
                 });
-                    Status = OrderStatus.Выполняется,
-                    ClientId = order.ClientId
-                };
-                if (!_houseStorage.Extract(order.DishId, order.Count))
-                {
-                    orderModel.Status = OrderStatus.Требуются_материалы;
-                    orderModel.ImplementerId = null;
-                }
-                _orderStorage.Update(orderModel);
             }
         }
         

@@ -80,6 +80,28 @@ namespace FoodOrdersDatabaseImplement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MessageInfoes",
+                columns: table => new
+                {
+                    MessageId = table.Column<string>(nullable: false),
+                    ClientId = table.Column<int>(nullable: true),
+                    SenderName = table.Column<string>(nullable: true),
+                    DateDelivery = table.Column<DateTime>(nullable: false),
+                    Subject = table.Column<string>(nullable: true),
+                    Body = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MessageInfoes", x => x.MessageId);
+                    table.ForeignKey(
+                        name: "FK_MessageInfoes_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DishComponents",
                 columns: table => new
                 {
@@ -182,6 +204,11 @@ namespace FoodOrdersDatabaseImplement.Migrations
                 column: "DishId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MessageInfoes_ClientId",
+                table: "MessageInfoes",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_ClientId",
                 table: "Orders",
                 column: "ClientId");
@@ -211,6 +238,9 @@ namespace FoodOrdersDatabaseImplement.Migrations
         {
             migrationBuilder.DropTable(
                 name: "DishComponents");
+
+            migrationBuilder.DropTable(
+                name: "MessageInfoes");
 
             migrationBuilder.DropTable(
                 name: "Orders");

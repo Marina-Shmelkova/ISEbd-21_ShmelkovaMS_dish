@@ -13,10 +13,7 @@ namespace FoodOrdersClientApp.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
-        {
-        }
-
+        private int pageNumber = 1;
         public IActionResult Index()
         {
             if (Program.Client == null)
@@ -134,14 +131,39 @@ namespace FoodOrdersClientApp.Controllers
             });
             Response.Redirect("Index");
         }
-        public IActionResult Mails()
+        public IActionResult Mails(int pageNumber)
         {
             if (Program.Client == null)
             {
                 return Redirect("~/Home/Enter");
             }
-            return View(APIClient.GetRequest<List<MessageInfoViewModel>>($"api/client/GetMessages?clientId={Program.Client.Id}"));
+            var model = APIClient.GetRequest<List<MessageInfoViewModel>>($"api/client/GetMessages?clientId={Program.Client.Id}&pageNumber={pageNumber}");
+            if (model.Count == 0)
+            {
+                model = APIClient.GetRequest<List<MessageInfoViewModel>>($"api/client/GetMessages?clientId={Program.Client.Id}&pageNumber={this.pageNumber}");
+            }
+            else
+            {
+                this.pageNumber = pageNumber;
+            }
+            return View(model);
         }
+        [HttpGet]
+        public IActionResult NextMailPage()
+        {
+            return Redirect($"~/Home/Mails?pageNumber={this.pageNumber + 1}");
+        }
+        [HttpGet]
+        public IActionResult PrevMailPage()
+        {
+            if (this.pageNumber > 1)
+            {
+                return Redirect($"~/Home/Mails?pageNumber={this.pageNumber - 1}");
+            }
+
+            return Redirect($"~/Home/Mails?pageNumber={this.pageNumber}");
+        }
+
         [HttpPost]
         public decimal Calc(decimal count, int dish)
         {
