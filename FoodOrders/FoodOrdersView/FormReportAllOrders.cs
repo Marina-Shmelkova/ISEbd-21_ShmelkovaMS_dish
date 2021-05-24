@@ -4,6 +4,9 @@ using System;
 using System.Windows.Forms;
 using Microsoft.Reporting.WinForms;
 using Unity;
+using FoodOrdersBusinessLogic.ViewModels;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace FoodOrdersView
 {
@@ -21,7 +24,8 @@ namespace FoodOrdersView
         {
             try
             {
-                var dataSource = logic.GetOrdersForAllDates();
+                MethodInfo method = logic.GetType().GetMethod("GetOrdersForAllDates");
+                List<ReportAllOrdersViewModel> dataSource = (List<ReportAllOrdersViewModel>)method.Invoke(logic, new object[] { });
                 ReportDataSource source = new ReportDataSource("DataSetOrders", dataSource);
                 reportViewer.LocalReport.DataSources.Add(source);
                 reportViewer.RefreshReport();
@@ -40,10 +44,11 @@ namespace FoodOrdersView
                 {
                     try
                     {
-                        logic.SaveAllOrdersToPdfFile(new ReportBindingModel
+                        MethodInfo method = logic.GetType().GetMethod("SaveAllOrdersToPdfFile");
+                        method.Invoke(logic, new object[] { new ReportBindingModel
                         {
                             FileName = dialog.FileName,
-                        });
+                        } });
                         MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                     }

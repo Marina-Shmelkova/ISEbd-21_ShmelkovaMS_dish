@@ -1,13 +1,7 @@
 ﻿using FoodOrdersBusinessLogic.BindingModels;
 using FoodOrdersBusinessLogic.BusinessLogics;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows.Forms;
 using Unity;
 
@@ -101,7 +95,11 @@ namespace FoodOrdersView
 			{
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					_report.SaveDishsToWordFile(new ReportBindingModel { FileName = dialog.FileName });
+					MethodInfo method = _report.GetType().GetMethod("SaveDishsToWordFile");
+					method.Invoke(_report, new object[] {new ReportBindingModel
+					{
+						FileName = dialog.FileName
+					}});
 					MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
@@ -118,10 +116,11 @@ namespace FoodOrdersView
 			{
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					_report.SaveStorehousesToWordFile(new ReportBindingModel
+					MethodInfo method = _report.GetType().GetMethod("SaveStorehousesToWordFile");
+					method.Invoke(_report, new object[] {new ReportBindingModel
 					{
 						FileName = dialog.FileName
-					});
+					 } });
 
 					MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}

@@ -38,7 +38,6 @@
             this.блюдаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.наборыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.клиентыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.исполнителиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.отчетыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.списокЗаказовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.списокНаборовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,9 +101,7 @@
             this.отчетыToolStripMenuItem,
             this.запускРаботToolStripMenuItem,
             this.письмаToolStripMenuItem,
-            this.запускРаботToolStripMenuItem,
-            this.пополнениеСкладаToolStripMenuItem});
-            this.письмаToolStripMenuItem,
+            this.пополнениеСкладаToolStripMenuItem,
             this.создатьБекапToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
