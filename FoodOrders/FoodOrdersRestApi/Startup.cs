@@ -26,6 +26,8 @@ namespace FoodOrdersRestApi
             services.AddTransient<IOrderStorage, OrderStorage>();
             services.AddTransient<IDishStorage, DishStorage>();
             services.AddTransient<IMessageInfoStorage, MessageInfoStorage>();
+            services.AddTransient<IStorehouseStorage, StorehouseStorage>();
+            services.AddTransient<IComponentStorage, ComponentStorage>();
             services.AddTransient<OrderLogic>();
             services.AddTransient<ClientLogic>();
             services.AddTransient<DishLogic>();
@@ -37,6 +39,8 @@ namespace FoodOrdersRestApi
                 MailLogin = "newprograming5@gmail.com",
                 MailPassword = "qwe123!@#qwe",
             });
+            services.AddTransient<StorehouseLogic>();
+            services.AddTransient<ComponentLogic>();
             services.AddControllers().AddNewtonsoftJson();
         }
 

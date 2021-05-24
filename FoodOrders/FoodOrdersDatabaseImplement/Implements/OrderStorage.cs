@@ -47,20 +47,22 @@ namespace FoodOrdersDatabaseImplement.Implements
                 using (var context = new FoodOrdersDatabase())
                 {
                     return context.Orders
-                   .Include(rec => rec.Dish)
-                   .Include(rec => rec.Client)
-                    .Include(rec => rec.Implementer)
-                    .Where(rec => (!model.DateFrom.HasValue && !model.DateTo.HasValue &&
+                     .Include(rec => rec.Dish)
+                     .Include(rec => rec.Client)
+                     .Include(rec => rec.Implementer)
+                     .Where(rec => (!model.DateFrom.HasValue && !model.DateTo.HasValue &&
                     rec.DateCreate.Date == model.DateCreate.Date) ||
-                     (model.DateFrom.HasValue && model.DateTo.HasValue &&
+                    (model.DateFrom.HasValue && model.DateTo.HasValue &&
                     rec.DateCreate.Date >= model.DateFrom.Value.Date && rec.DateCreate.Date <=
                     model.DateTo.Value.Date) ||
-                     (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
+                    (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
                     (model.FreeOrders.HasValue && model.FreeOrders.Value && rec.Status == OrderStatus.Принят) ||
-                     (model.ImplementerId.HasValue && rec.ImplementerId ==
-                    model.ImplementerId && rec.Status == OrderStatus.Выполняется))
-                    .Select(rec => new OrderViewModel
-                    {
+                    (model.ImplementerId.HasValue && rec.ImplementerId ==
+                    model.ImplementerId && rec.Status == OrderStatus.Выполняется) ||
+                    (model.NeedComponentOrders.HasValue && model.NeedComponentOrders.Value && rec.Status ==
+                    OrderStatus.Требуются_материалы))
+                     .Select(rec => new OrderViewModel
+                 {
                         Id = rec.Id,
                         ClientId = rec.ClientId,
                         ClientFIO = rec.Client.ClientFIO,
@@ -86,26 +88,26 @@ namespace FoodOrdersDatabaseImplement.Implements
                 }
                 using (var context = new FoodOrdersDatabase())
                 {
-                var order = context.Orders.Include(rec => rec.Dish).Include(rec => rec.Client)
-                    .Include(rec => rec.Implementer).FirstOrDefault(rec => rec.Id == model.Id);
-                return order != null ?
-                new OrderViewModel
-                {
-                    Id = order.Id,
-                    ClientId = order.ClientId,
-                    ClientFIO = order.Client.ClientFIO,
-                    ImplementerId = order.ImplementerId,
-                    ImplementerFIO = order.ImplementerId.HasValue ? order.Implementer.ImplementerFIO : string.Empty,
-                    DishId = order.DishId,
-                    DishName = order.Dish.DishName,
-                    Count = order.Count,
-                    Sum = order.Sum,
-                    Status = order.Status,
-                    DateCreate = order.DateCreate,
-                    DateImplement = order.DateImplement
-                } :
-                null;
-            }
+                    var order = context.Orders.Include(rec => rec.Dish).Include(rec => rec.Client)
+                        .Include(rec => rec.Implementer).FirstOrDefault(rec => rec.Id == model.Id);
+                    return order != null ?
+                    new OrderViewModel
+                    {
+                        Id = order.Id,
+                        ClientId = order.ClientId,
+                        ClientFIO = order.Client.ClientFIO,
+                        ImplementerId = order.ImplementerId,
+                        ImplementerFIO = order.ImplementerId.HasValue ? order.Implementer.ImplementerFIO : string.Empty,
+                        DishId = order.DishId,
+                        DishName = order.Dish.DishName,
+                        Count = order.Count,
+                        Sum = order.Sum,
+                        Status = order.Status,
+                        DateCreate = order.DateCreate,
+                        DateImplement = order.DateImplement
+                    } :
+                    null;
+                }
             }
 
             public void Insert(OrderBindingModel model)
@@ -160,7 +162,7 @@ namespace FoodOrdersDatabaseImplement.Implements
                 order.DateImplement = model.DateImplement;
                 order.ClientId = model.ClientId.Value;
                 order.ImplementerId = model.ImplementerId;
-            return order;
+                return order;
             }
         }
 }

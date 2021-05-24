@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodOrdersDatabaseImplement.Migrations
 {
     [DbContext(typeof(FoodOrdersDatabase))]
-    [Migration("20210404093502_AddClient")]
-    partial class AddClient
+    [Migration("20210509062745_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,6 +105,28 @@ namespace FoodOrdersDatabaseImplement.Migrations
                     b.ToTable("DishComponents");
                 });
 
+            modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.Implementer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ImplementerFIO")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PauseTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkingTime")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Implementers");
+                });
+
             modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -127,6 +149,9 @@ namespace FoodOrdersDatabaseImplement.Migrations
                     b.Property<int>("DishId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ImplementerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -139,7 +164,57 @@ namespace FoodOrdersDatabaseImplement.Migrations
 
                     b.HasIndex("DishId");
 
+                    b.HasIndex("ImplementerId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.Storehouse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Responsible")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StorehouseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Storehouses");
+                });
+
+            modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.StorehouseComponent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StorehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComponentId");
+
+                    b.HasIndex("StorehouseId");
+
+                    b.ToTable("StorehouseComponents");
                 });
 
             modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.DishComponent", b =>
@@ -159,15 +234,34 @@ namespace FoodOrdersDatabaseImplement.Migrations
 
             modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.Order", b =>
                 {
-                    b.HasOne("FoodOrdersDatabaseImplement.Models.Client", null)
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Client", "Client")
                         .WithMany("Order")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FoodOrdersDatabaseImplement.Models.Dish", null)
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Dish", "Dish")
                         .WithMany("Order")
                         .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Implementer", "Implementer")
+                        .WithMany("Order")
+                        .HasForeignKey("ImplementerId");
+                });
+
+            modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.StorehouseComponent", b =>
+                {
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Component", "Component")
+                        .WithMany("StorehouseComponent")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Storehouse", "Storehouse")
+                        .WithMany("StorehouseComponent")
+                        .HasForeignKey("StorehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

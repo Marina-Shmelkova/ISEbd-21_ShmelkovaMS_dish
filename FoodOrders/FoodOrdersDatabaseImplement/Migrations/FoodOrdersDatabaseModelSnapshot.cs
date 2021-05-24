@@ -194,6 +194,54 @@ namespace FoodOrdersDatabaseImplement.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.Storehouse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Responsible")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StorehouseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Storehouses");
+                });
+
+            modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.StorehouseComponent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StorehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComponentId");
+
+                    b.HasIndex("StorehouseId");
+
+                    b.ToTable("StorehouseComponents");
+                });
+
             modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.DishComponent", b =>
                 {
                     b.HasOne("FoodOrdersDatabaseImplement.Models.Component", "Component")
@@ -233,6 +281,21 @@ namespace FoodOrdersDatabaseImplement.Migrations
                     b.HasOne("FoodOrdersDatabaseImplement.Models.Implementer", "Implementer")
                         .WithMany("Order")
                         .HasForeignKey("ImplementerId");
+                });
+
+            modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.StorehouseComponent", b =>
+                {
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Component", "Component")
+                        .WithMany("StorehouseComponent")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Storehouse", "Storehouse")
+                        .WithMany("StorehouseComponent")
+                        .HasForeignKey("StorehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

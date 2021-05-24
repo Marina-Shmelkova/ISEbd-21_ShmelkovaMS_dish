@@ -14,7 +14,8 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         private readonly IOrderStorage _orderStorage;
         private readonly IClientStorage _clientStorage;
         private readonly object locker = new object();
-        public OrderLogic(IOrderStorage orderStorage, IClientStorage clientStorage)
+        private readonly IStorehouseStorage _houseStorage;
+        public OrderLogic(IOrderStorage orderStorage, IStorehouseStorage houseStorage)
         {
             _orderStorage = orderStorage;
             _clientStorage = clientStorage;
@@ -65,15 +66,15 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 {
                     throw new Exception("Не найден заказ");
                 }
-                if (order.Status != OrderStatus.Принят)
+                if (order.Status != OrderStatus.Принят && order.Status != OrderStatus.Требуются_материалы)
                 {
-                    throw new Exception("Заказ не в статусе \"Принят\"");
+                    throw new Exception("Заказ не в статусе \"Принят\" или \"Требуются материалы\"");
                 }
                 if (order.ImplementerId.HasValue)
                 {
                     throw new Exception("У заказа уже есть исполнитель");
                 }
-                _orderStorage.Update(new OrderBindingModel
+                OrderBindingModel orderModel = new OrderBindingModel
                 {
                     Id = order.Id,
                     ImplementerId = model.ImplementerId,
@@ -95,8 +96,18 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     Subject = $"Заказ №{order.Id}",
                     Text = $"Заказ №{order.Id} передан в работу."
                 });
+                    Status = OrderStatus.Выполняется,
+                    ClientId = order.ClientId
+                };
+                if (!_houseStorage.Extract(order.DishId, order.Count))
+                {
+                    orderModel.Status = OrderStatus.Требуются_материалы;
+                    orderModel.ImplementerId = null;
+                }
+                _orderStorage.Update(orderModel);
             }
         }
+        
         public void FinishOrder(ChangeStatusBindingModel model)
         {
             var order = _orderStorage.GetElement(new OrderBindingModel

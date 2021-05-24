@@ -32,6 +32,7 @@ namespace FoodOrdersListImplement
             {
                 return null;
             }
+
             List<OrderViewModel> result = new List<OrderViewModel>();
             foreach (var order in source.Orders)
             {
@@ -43,7 +44,8 @@ namespace FoodOrdersListImplement
                     (model.ClientId.HasValue && order.ClientId == model.ClientId) ||
                     (model.FreeOrders.HasValue && model.FreeOrders.Value && order.Status == OrderStatus.Принят) ||
                     (model.ImplementerId.HasValue && order.ImplementerId ==
-                    model.ImplementerId && order.Status == OrderStatus.Выполняется))
+                    model.ImplementerId && order.Status == OrderStatus.Выполняется) ||
+                    (model.NeedComponentOrders.HasValue && model.NeedComponentOrders.Value && order.Status == OrderStatus.Требуются_материалы))
                 {
                     result.Add(CreateModel(order));
                 }
@@ -110,6 +112,7 @@ namespace FoodOrdersListImplement
         {
             order.DishId = model.DishId;
             order.ImplementerId = model.ImplementerId;
+            order.ClientId = (int)model.ClientId;
             order.Count = model.Count;
             order.Sum = model.Sum;
             order.Status = model.Status;

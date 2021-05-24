@@ -12,15 +12,14 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
 {
     public class ReportLogic
     {
-        private readonly IComponentStorage _componentStorage;
         private readonly IDishStorage _dishStorage;
         private readonly IOrderStorage _orderStorage;
-        public ReportLogic(IDishStorage dishStorage, IComponentStorage
-       componentStorage, IOrderStorage orderStorage)
+        private readonly IStorehouseStorage _houseStorage;
+        public ReportLogic(IDishStorage dishStorage, IOrderStorage orderStorage, IStorehouseStorage houseStorage)
         {
             _dishStorage = dishStorage;
-            _componentStorage = componentStorage;
             _orderStorage = orderStorage;
+            _houseStorage = houseStorage;
         }
         /// <summary>
         /// Получение списка компонент с указанием, в каких изделиях используются
@@ -29,7 +28,6 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
 
         public List<ReportComponentDishViewModel> GetComponentsDish()
         {
-            var components = _componentStorage.GetFullList();
             var dishs = _dishStorage.GetFullList();
             var list = new List<ReportComponentDishViewModel>();
             foreach (var dish in dishs)
@@ -41,14 +39,35 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     TotalCount = 0
                 };
 
-                foreach (var component in components)
+                foreach (var component in dish.DishComponents)
                 {
-                    if (dish.DishComponents.ContainsKey(component.Id))
-                    {
-                        record.Components.Add(new Tuple<string, int>(component.ComponentName,
-                        dish.DishComponents[component.Id].Item2));
-                        record.TotalCount += dish.DishComponents[component.Id].Item2;
-                    }
+                    record.Components.Add(new Tuple<string, int>(component.Value.Item1, component.Value.Item2));
+                    record.TotalCount += component.Value.Item2;
+                }
+                list.Add(record);
+            }
+            return list;
+        }
+        /// <summary>
+        /// Получение списка компонент с указанием, в каких складах они хранятся
+        /// </summary>
+        /// <returns></returns>
+        public List<ReportComponentStorehouseViewModel> GetComponentStorehouse()
+        {
+            var houses = _houseStorage.GetFullList();
+            var list = new List<ReportComponentStorehouseViewModel>();
+            foreach (var house in houses)
+            {
+                var record = new ReportComponentStorehouseViewModel
+                {
+                    StorehouseName = house.StorehouseName,
+                    Components = new List<Tuple<string, int>>(),
+                    TotalCount = 0
+                };
+                foreach (var component in house.StorehouseComponents)
+                {
+                    record.Components.Add(new Tuple<string, int>(component.Value.Item1, component.Value.Item2));
+                    record.TotalCount += component.Value.Item2;
                 }
                 list.Add(record);
             }
@@ -75,6 +94,22 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 Status = ((OrderStatus)Enum.Parse(typeof(OrderStatus), x.Status.ToString())).ToString()
             })
            .ToList();
+        }
+        /// Получение списка заказов сгруппированных по дате
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public List<ReportAllOrdersViewModel> GetOrdersForAllDates()
+        {
+            return _orderStorage.GetFullList()
+                .GroupBy(order => order.DateCreate.ToShortDateString())
+                .Select(rec => new ReportAllOrdersViewModel
+                {
+                    Date = Convert.ToDateTime(rec.Key),
+                    Count = rec.Count(),
+                    Sum = rec.Sum(order => order.Sum)
+                })
+                .ToList();
         }
         /// <summary>
         /// Сохранение компонент в файл-Word
@@ -104,6 +139,15 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 ComponentDishs = GetComponentsDish()
             });
         }
+        public void SaveComponentStorehouseToExcelFile(ReportBindingModel model)
+        {
+            SaveToExcel.CreateDoc(new ExcelInfo
+            {
+                FileName = model.FileName,
+                Title = "Список складов",
+                ComponentStorehouses = GetComponentStorehouse()
+            });
+        }
         /// <summary>
         /// Сохранение заказов в файл-Pdf
         /// </summary>
@@ -117,6 +161,24 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 DateFrom = model.DateFrom.Value,
                 DateTo = model.DateTo.Value,
                 Orders = GetOrders(model)
+            });
+        }
+        public void SaveStorehousesToWordFile(ReportBindingModel model)
+        {
+            SaveToWord.CreateDocStorehouse(new WordInfoStorehouse
+            {
+                FileName = model.FileName,
+                Title = "Таблица складов",
+                Storehouses = _houseStorage.GetFullList()
+            });
+        }
+        public void SaveAllOrdersToPdfFile(ReportBindingModel model)
+        {
+            SaveToPdf.CreateDocAllOrders(new PdfInfoOrdersAllDates
+            {
+                FileName = model.FileName,
+                Title = "Список заказов",
+                Orders = GetOrdersForAllDates()
             });
         }
     }

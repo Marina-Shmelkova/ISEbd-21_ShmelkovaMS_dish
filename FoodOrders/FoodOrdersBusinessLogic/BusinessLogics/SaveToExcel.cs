@@ -16,7 +16,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
         public static void CreateDoc(ExcelInfo info)
         {
             using (SpreadsheetDocument spreadsheetDocument =
-           SpreadsheetDocument.Create(info.FileName, SpreadsheetDocumentType.Workbook))
+            SpreadsheetDocument.Create(info.FileName, SpreadsheetDocumentType.Workbook))
             {
                 // Создаем книгу (в ней хранятся листы)
                 WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
@@ -24,11 +24,11 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 CreateStyles(workbookpart);
                 // Получаем/создаем хранилище текстов для книги
                 SharedStringTablePart shareStringPart =
-               spreadsheetDocument.WorkbookPart.GetPartsOfType<SharedStringTablePart>().Count() > 0
+                spreadsheetDocument.WorkbookPart.GetPartsOfType<SharedStringTablePart>().Count() > 0
                 ?
-               spreadsheetDocument.WorkbookPart.GetPartsOfType<SharedStringTablePart>().First()
+                spreadsheetDocument.WorkbookPart.GetPartsOfType<SharedStringTablePart>().First()
                 :
-               spreadsheetDocument.WorkbookPart.AddNewPart<SharedStringTablePart>();
+                spreadsheetDocument.WorkbookPart.AddNewPart<SharedStringTablePart>();
                 // Создаем SharedStringTable, если его нет
                 if (shareStringPart.SharedStringTable == null)
                 {
@@ -36,9 +36,10 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 }
                 // Создаем лист в книгу
                 WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
-                worksheetPart.Worksheet = new Worksheet(new SheetData());// Добавляем лист в книгу
+                worksheetPart.Worksheet = new Worksheet(new SheetData());
+                // Добавляем лист в книгу
                 Sheets sheets =
-               spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
+                spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
                 Sheet sheet = new Sheet()
                 {
                     Id = spreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart),
@@ -61,62 +62,128 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     CellFromName = "A1",
                     CellToName = "C1"
                 });
-                uint rowIndex = 2;
+
                 if (info.ComponentDishs != null)
                 {
-                    foreach (var pc in info.ComponentDishs)
-                    {
-                        InsertCellInWorksheet(new ExcelCellParameters
-                        {
-                            Worksheet = worksheetPart.Worksheet,
-                            ShareStringPart = shareStringPart,
-                            ColumnName = "A",
-                            RowIndex = rowIndex,
-                            Text = pc.DishName,
-                            StyleIndex = 0U
-                        });
-                        rowIndex++;
-
-                        foreach (var component in pc.Components)
-                        {
-                            InsertCellInWorksheet(new ExcelCellParameters
-                            {
-                                Worksheet = worksheetPart.Worksheet,
-                                ShareStringPart = shareStringPart,
-                                ColumnName = "B",
-                                RowIndex = rowIndex,
-                                Text = component.Item1,
-                                StyleIndex = 1U
-                            });
-
-                            InsertCellInWorksheet(new ExcelCellParameters
-                            {
-                                Worksheet = worksheetPart.Worksheet,
-                                ShareStringPart = shareStringPart,
-                                ColumnName = "C",
-                                RowIndex = rowIndex,
-                                Text = component.Item2.ToString(),
-                                StyleIndex = 1U
-                            });
-
-                            rowIndex++;
-                        }
-
-                        InsertCellInWorksheet(new ExcelCellParameters
-                        {
-                            Worksheet = worksheetPart.Worksheet,
-                            ShareStringPart = shareStringPart,
-                            ColumnName = "C",
-                            RowIndex = rowIndex,
-                            Text = pc.TotalCount.ToString(),
-                            StyleIndex = 0U
-                        });
-                        rowIndex++;
-                    }
-                    workbookpart.Workbook.Save();
+                    CreateDishBody(info, worksheetPart, shareStringPart);
                 }
+                else if (info.ComponentStorehouses != null)
+                {
+                    CreateStorehouseBody(info, worksheetPart, shareStringPart);
+                }
+
+                workbookpart.Workbook.Save();
             }
         }
+        private static void CreateDishBody(ExcelInfo info, WorksheetPart worksheetPart, SharedStringTablePart shareStringPart)
+        {
+            uint rowIndex = 2;
+
+            foreach (var ds in info.ComponentDishs)
+            {
+                InsertCellInWorksheet(new ExcelCellParameters
+                {
+                    Worksheet = worksheetPart.Worksheet,
+                    ShareStringPart = shareStringPart,
+                    ColumnName = "A",
+                    RowIndex = rowIndex,
+                    Text = ds.DishName,
+                    StyleIndex = 0U
+                });
+                rowIndex++;
+
+                foreach (var component in ds.Components)
+                {
+                    InsertCellInWorksheet(new ExcelCellParameters
+                    {
+                        Worksheet = worksheetPart.Worksheet,
+                        ShareStringPart = shareStringPart,
+                        ColumnName = "B",
+                        RowIndex = rowIndex,
+                        Text = component.Item1,
+                        StyleIndex = 1U
+                    });
+
+                    InsertCellInWorksheet(new ExcelCellParameters
+                    {
+                        Worksheet = worksheetPart.Worksheet,
+                        ShareStringPart = shareStringPart,
+                        ColumnName = "C",
+                        RowIndex = rowIndex,
+                        Text = component.Item2.ToString(),
+                        StyleIndex = 1U
+                    });
+
+                    rowIndex++;
+                }
+
+                InsertCellInWorksheet(new ExcelCellParameters
+                {
+                    Worksheet = worksheetPart.Worksheet,
+                    ShareStringPart = shareStringPart,
+                    ColumnName = "C",
+                    RowIndex = rowIndex,
+                    Text = ds.TotalCount.ToString(),
+                    StyleIndex = 0U
+                });
+                rowIndex++;
+            }
+        }
+        private static void CreateStorehouseBody(ExcelInfo info, WorksheetPart worksheetPart, SharedStringTablePart shareStringPart)
+        {
+            uint rowIndex = 2;
+
+            foreach (var pc in info.ComponentStorehouses)
+            {
+                InsertCellInWorksheet(new ExcelCellParameters
+                {
+                    Worksheet = worksheetPart.Worksheet,
+                    ShareStringPart = shareStringPart,
+                    ColumnName = "A",
+                    RowIndex = rowIndex,
+                    Text = pc.StorehouseName,
+                    StyleIndex = 0U
+                });
+                rowIndex++;
+
+                foreach (var component in pc.Components)
+                {
+                    InsertCellInWorksheet(new ExcelCellParameters
+                    {
+                        Worksheet = worksheetPart.Worksheet,
+                        ShareStringPart = shareStringPart,
+                        ColumnName = "B",
+                        RowIndex = rowIndex,
+                        Text = component.Item1,
+                        StyleIndex = 1U
+                    });
+
+                    InsertCellInWorksheet(new ExcelCellParameters
+                    {
+                        Worksheet = worksheetPart.Worksheet,
+                        ShareStringPart = shareStringPart,
+                        ColumnName = "C",
+                        RowIndex = rowIndex,
+                        Text = component.Item2.ToString(),
+                        StyleIndex = 1U
+                    });
+
+                    rowIndex++;
+                }
+
+                InsertCellInWorksheet(new ExcelCellParameters
+                {
+                    Worksheet = worksheetPart.Worksheet,
+                    ShareStringPart = shareStringPart,
+                    ColumnName = "C",
+                    RowIndex = rowIndex,
+                    Text = pc.TotalCount.ToString(),
+                    StyleIndex = 0U
+                });
+                rowIndex++;
+            }
+        }
+
         /// <summary>
         /// Настройка стилей для файла
         /// </summary>
@@ -325,10 +392,10 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             // Ищем строку, либо добавляем ее
             Row row;
             if (sheetData.Elements<Row>().Where(r => r.RowIndex ==
-           cellParameters.RowIndex).Count() != 0)
+            cellParameters.RowIndex).Count() != 0)
             {
                 row = sheetData.Elements<Row>().Where(r => r.RowIndex ==
-               cellParameters.RowIndex).First();
+                cellParameters.RowIndex).First();
             }
             else
             {
@@ -336,11 +403,11 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 sheetData.Append(row);
             }
             // Ищем нужную ячейку
-            Cell cell; if (row.Elements<Cell>().Where(c => c.CellReference.Value ==
- cellParameters.CellReference).Count() > 0)
+            Cell cell;
+            if (row.Elements<Cell>().Where(c => c.CellReference.Value == cellParameters.CellReference).Count() > 0)
             {
                 cell = row.Elements<Cell>().Where(c => c.CellReference.Value ==
-               cellParameters.CellReference).First();
+                cellParameters.CellReference).First();
             }
             else
             {
@@ -350,7 +417,7 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 foreach (Cell rowCell in row.Elements<Cell>())
                 {
                     if (string.Compare(rowCell.CellReference.Value,
-                   cellParameters.CellReference, true) > 0)
+                    cellParameters.CellReference, true) > 0)
                     {
                         refCell = rowCell;
                         break;
@@ -365,11 +432,11 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
             }
             // вставляем новый текст
             cellParameters.ShareStringPart.SharedStringTable.AppendChild(new
-           SharedStringItem(new Text(cellParameters.Text)));
+            SharedStringItem(new Text(cellParameters.Text)));
             cellParameters.ShareStringPart.SharedStringTable.Save();
             cell.CellValue = new
-           CellValue((cellParameters.ShareStringPart.SharedStringTable.Elements<SharedStringItem>().
-           Count() - 1).ToString());
+            CellValue((cellParameters.ShareStringPart.SharedStringTable.Elements<SharedStringItem>().
+            Count() - 1).ToString());
             cell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
             cell.StyleIndex = cellParameters.StyleIndex;
         }
@@ -390,11 +457,12 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 if (mergeParameters.Worksheet.Elements<CustomSheetView>().Count() > 0)
                 {
                     mergeParameters.Worksheet.InsertAfter(mergeCells,
-                   mergeParameters.Worksheet.Elements<CustomSheetView>().First());
+                    mergeParameters.Worksheet.Elements<CustomSheetView>().First());
                 }
                 else
                 {
-                    mergeParameters.Worksheet.InsertAfter(mergeCells, mergeParameters.Worksheet.Elements<SheetData>().First());
+                    mergeParameters.Worksheet.InsertAfter(mergeCells,
+                    mergeParameters.Worksheet.Elements<SheetData>().First());
                 }
             }
             MergeCell mergeCell = new MergeCell()

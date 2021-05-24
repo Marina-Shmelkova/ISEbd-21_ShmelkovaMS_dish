@@ -36,7 +36,8 @@ namespace FoodOrdersFileImplement.Implements
                     (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
                     (model.FreeOrders.HasValue && model.FreeOrders.Value && rec.Status == OrderStatus.Принят) ||
                     (model.ImplementerId.HasValue && rec.ImplementerId ==
-                    model.ImplementerId && rec.Status == OrderStatus.Выполняется))
+                    model.ImplementerId && rec.Status == OrderStatus.Выполняется) ||
+                    (model.NeedComponentOrders.HasValue && model.NeedComponentOrders.Value && rec.Status == OrderStatus.Требуются_материалы))
                     .Select(CreateModel).ToList();
         }
 
@@ -86,11 +87,11 @@ namespace FoodOrdersFileImplement.Implements
             order.ClientId = (int)model.ClientId;
             order.ImplementerId = model.ImplementerId.Value;
             order.DishId = model.DishId;
+            order.Count = model.Count;
             order.Status = model.Status;
             order.Sum = model.Sum;
             order.DateCreate = model.DateCreate;
-            order.DateImplement = model.DateImplement;
-            order.Count = model.Count;
+            order.DateImplement = model.DateImplement;      
             return order;
         }
 

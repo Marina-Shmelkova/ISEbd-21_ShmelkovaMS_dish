@@ -47,7 +47,7 @@ namespace FoodOrdersView
             // 
             // buttonDel
             // 
-            this.buttonDel.Location = new System.Drawing.Point(377, 252);
+            this.buttonDel.Location = new System.Drawing.Point(368, 142);
             this.buttonDel.Name = "buttonDel";
             this.buttonDel.Size = new System.Drawing.Size(75, 23);
             this.buttonDel.TabIndex = 16;
@@ -57,7 +57,7 @@ namespace FoodOrdersView
             // 
             // buttonUpd
             // 
-            this.buttonUpd.Location = new System.Drawing.Point(377, 197);
+            this.buttonUpd.Location = new System.Drawing.Point(368, 87);
             this.buttonUpd.Name = "buttonUpd";
             this.buttonUpd.Size = new System.Drawing.Size(75, 23);
             this.buttonUpd.TabIndex = 15;
