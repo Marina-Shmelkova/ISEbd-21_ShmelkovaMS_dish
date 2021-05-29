@@ -13,10 +13,6 @@ namespace FoodOrdersClientApp.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
-        {
-        }
-
         public IActionResult Index()
         {
             if (Program.Client == null)
@@ -127,12 +123,22 @@ namespace FoodOrdersClientApp.Controllers
             }
             APIClient.PostRequest("api/main/createorder", new CreateOrderBindingModel
             {
-                ClientId = (int)Program.Client.Id,
+                ClientId = Program.Client.Id.Value,
                 DishId = dish,
                 Count = count,
                 Sum = sum
             });
             Response.Redirect("Index");
+        }
+        public IActionResult Mails(int page = 1)
+        {
+            if (Program.Client == null)
+            {
+                return Redirect("~/Home/Enter");
+            }
+            int pageSize = 7;   // количество элементов на странице            
+            return View(APIClient.GetRequest<PageViewModel>($"api/client/GetPage?pageSize={pageSize}" +
+                $"&page={page}&ClientId={Program.Client.Id}"));
         }
 
         [HttpPost]
@@ -141,5 +147,6 @@ namespace FoodOrdersClientApp.Controllers
             DishViewModel prod = APIClient.GetRequest<DishViewModel>($"api/main/getdish?dishId={dish}");
             return count * prod.Price;
         }
+       
     }
 }

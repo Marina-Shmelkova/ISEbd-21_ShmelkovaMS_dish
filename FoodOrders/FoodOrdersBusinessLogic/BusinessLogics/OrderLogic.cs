@@ -1,5 +1,6 @@
 ﻿using FoodOrdersBusinessLogic.BindingModels;
 using FoodOrdersBusinessLogic.Enums;
+using FoodOrdersBusinessLogic.HelperModels;
 using FoodOrdersBusinessLogic.Interfaces;
 using FoodOrdersBusinessLogic.ViewModels;
 using System;
@@ -11,11 +12,13 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
     public class OrderLogic
     {
         private readonly IOrderStorage _orderStorage;
+        private readonly IClientStorage _clientStorage;
         private readonly object locker = new object();
         private readonly IStorehouseStorage _houseStorage;
-        public OrderLogic(IOrderStorage orderStorage, IStorehouseStorage houseStorage)
+        public OrderLogic(IOrderStorage orderStorage, IStorehouseStorage houseStorage,IClientStorage clientStorage)
         {
             _orderStorage = orderStorage;
+            _clientStorage = clientStorage;
             _houseStorage = houseStorage;
         }
         public List<OrderViewModel> Read(OrderBindingModel model)
@@ -40,6 +43,15 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 DateCreate = DateTime.Now,
                 Status = OrderStatus.Принят,
                 ClientId = model.ClientId
+            });
+            MailLogic.MailSendAsync(new MailSendInfo
+            {
+                MailAddress = _clientStorage.GetElement(new ClientBindingModel
+                {
+                    Id = model.ClientId
+                })?.Email,
+                Subject = $"Новый заказ",
+                Text = $"Заказ от {DateTime.Now} на сумму {model.Sum:N2} принят."
             });
         }
         public void TakeOrderInWork(ChangeStatusBindingModel model)
@@ -81,6 +93,15 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                     orderModel.ImplementerId = null;
                 }
                 _orderStorage.Update(orderModel);
+                MailLogic.MailSendAsync(new MailSendInfo
+                {
+                    MailAddress = _clientStorage.GetElement(new ClientBindingModel
+                    {
+                        Id = order.ClientId
+                    })?.Email,
+                    Subject = $"Заказ №{order.Id}",
+                    Text = $"Заказ №{order.Id} передан в работу."
+                });
             }
         }
         
@@ -110,6 +131,16 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 ClientId = order.ClientId,
                 ImplementerId = order.ImplementerId
             });
+
+            MailLogic.MailSendAsync(new MailSendInfo
+            {
+                MailAddress = _clientStorage.GetElement(new ClientBindingModel
+                {
+                    Id = order.ClientId
+                })?.Email,
+                Subject = $"Заказ №{order.Id}",
+                Text = $"Заказ №{order.Id} выполнен."
+            });
         }
         public void PayOrder(ChangeStatusBindingModel model)
         {
@@ -135,7 +166,15 @@ namespace FoodOrdersBusinessLogic.BusinessLogics
                 ImplementerId = order.ImplementerId
             });
 
+            MailLogic.MailSendAsync(new MailSendInfo
+            {
+                MailAddress = _clientStorage.GetElement(new ClientBindingModel
+                {
+                    Id = order.ClientId
+                })?.Email,
+                Subject = $"Заказ №{order.Id}",
+                Text = $"Заказ №{order.Id} оплачен."
+            });
         }
-
     }
 }

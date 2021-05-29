@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodOrdersDatabaseImplement.Migrations
 {
     [DbContext(typeof(FoodOrdersDatabase))]
-    [Migration("20210509062745_InitialCreate")]
+    [Migration("20210524133447_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,6 +127,33 @@ namespace FoodOrdersDatabaseImplement.Migrations
                     b.ToTable("Implementers");
                 });
 
+            modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.MessageInfo", b =>
+                {
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateDelivery")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SenderName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("MessageInfoes");
+                });
+
             modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -230,6 +257,13 @@ namespace FoodOrdersDatabaseImplement.Migrations
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.MessageInfo", b =>
+                {
+                    b.HasOne("FoodOrdersDatabaseImplement.Models.Client", "Client")
+                        .WithMany("MessageInfo")
+                        .HasForeignKey("ClientId");
                 });
 
             modelBuilder.Entity("FoodOrdersDatabaseImplement.Models.Order", b =>

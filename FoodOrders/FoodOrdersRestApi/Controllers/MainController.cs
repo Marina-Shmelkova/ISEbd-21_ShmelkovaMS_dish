@@ -31,7 +31,7 @@ namespace FoodOrdersRestApi.Controllers
         [HttpGet]
         public List<OrderViewModel> GetOrders(int clientId) => _order.Read(new OrderBindingModel { ClientId = clientId });
 
-        [HttpPost]
+         [HttpPost]
         public void CreateOrder(CreateOrderBindingModel model) => _main.CreateOrder(model);
     }
 }
