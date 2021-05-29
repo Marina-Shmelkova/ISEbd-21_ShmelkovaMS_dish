@@ -26,5 +26,10 @@ namespace FoodOrdersBusinessLogic.ViewModels
         [DisplayName("Текст")]
         [DataMember]
         public string Body { get; set; }
+        [DataMember]
+        public int? PageSize { get; set; }
+
+        [DataMember]
+        public int? Page { get; set; }
     }
 }

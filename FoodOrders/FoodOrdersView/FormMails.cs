@@ -1,5 +1,6 @@
 ﻿using FoodOrdersBusinessLogic.BindingModels;
 using FoodOrdersBusinessLogic.BusinessLogics;
+using FoodOrdersBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,7 @@ namespace FoodOrdersView
     {
         private int pageNumber = 1;
         private readonly MailLogic logic;
+        private PageViewModel pageViewModel;
         public FormMails(MailLogic logic)
         {
             this.logic = logic;
@@ -25,78 +27,74 @@ namespace FoodOrdersView
         private void FormMails_Load(object sender, EventArgs e)
         {
             LoadData();
-            textBox.Text = pageNumber.ToString();
         }
-        private void LoadData()
+        private void LoadData(int page = 1)
         {
-            var list = logic.Read(new MessageInfoBindingModel
+            int pageSize = 10; // Количество элементов на странице
+
+            var list = logic.GetMessagesForPage(new MessageInfoBindingModel
             {
-                PageNumber = pageNumber
+                Page = page,
+                PageSize = pageSize
             });
             if (list != null)
             {
+                pageViewModel = new PageViewModel(logic.Count(), page, pageSize, list);
                 dataGridView.DataSource = list;
                 dataGridView.Columns[0].Visible = false;
+                dataGridView.Columns[5].Visible = false;
+                dataGridView.Columns[6].Visible = false;
                 dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                textBox.Text = pageNumber.ToString();
+            }
+            // отображаем +- 2 страницы
+            int pageStart = page < 3 ? 1 : page - 2;
+            Button[] buttons = { buttonPageOne, buttonPageTwo, buttonPageThree, buttonPageFour, buttonPageFive };
+            for (int i = 0; i < buttons.Length; ++i)
+            {
+                buttons[i].Show();
+                SetButtonPagetext(buttons[i], pageStart + i, pageViewModel.TotalPages);
             }
         }
-        private void buttonBack_Click(object sender, EventArgs e)
-        {
-            if (pageNumber > 1)
-            {
-                pageNumber--;
-            }
 
-            LoadData();
+        private void SetButtonPagetext(Button button, int pageNumber, int totalPages)
+        {
+            if (pageNumber <= totalPages)
+            {
+                button.Text = pageNumber.ToString();
+            }
+            else
+            {
+                button.Hide();
+            }
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
-            int stringsCountOnPage = logic.Read(new MessageInfoBindingModel
+            if (pageViewModel.HasNextPage)
             {
-                PageNumber = pageNumber + 1
-            }).Count;
-
-            if (stringsCountOnPage != 0)
+                LoadData(pageViewModel.PageNumber + 1);
+            }
+            else
             {
-                pageNumber++;
-                LoadData();
+                MessageBox.Show("Последняя страница", "Ой", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        private void textBox_TextChanged(object sender, EventArgs e)
+
+        private void buttonPrev_Click(object sender, EventArgs e)
         {
-            try
+            if (pageViewModel.HasPreviousPage)
             {
-                if (textBox.Text != "")
-                {
-                    int pageNumberValue = Convert.ToInt32(textBox.Text);
-
-                    if (pageNumberValue < 1)
-                    {
-                        throw new Exception();
-                    }
-
-                    int stringsCountOnPage = logic.Read(new MessageInfoBindingModel
-                    {
-                        PageNumber = pageNumberValue
-                    }).Count;
-
-                    if (stringsCountOnPage == 0)
-                    {
-                        throw new Exception();
-                    }
-
-                    pageNumber = pageNumberValue;
-                    LoadData();
-                }
+                LoadData(pageViewModel.PageNumber - 1);
             }
-            catch (Exception)
+            else
             {
-                textBox.Text = pageNumber.ToString();
+                MessageBox.Show("Первая страница", "Ой", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void buttonPage_Click(object sender, EventArgs e)
+        {
+            LoadData(Convert.ToInt32(((Button)sender).Text));
         }
     }
 }

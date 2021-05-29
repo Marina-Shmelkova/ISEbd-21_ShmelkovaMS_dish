@@ -11,7 +11,6 @@ namespace FoodOrdersDatabaseImplement.Implements
 {
     public class MessageInfoStorage : IMessageInfoStorage
     {
-        private readonly int stringsOnPage = 6;
         public List<MessageInfoViewModel> GetFullList()
         {
             using (var context = new FoodOrdersDatabase())
@@ -36,30 +35,45 @@ namespace FoodOrdersDatabaseImplement.Implements
             }
             using (var context = new FoodOrdersDatabase())
             {
-                var messageInfoes = context.MessageInfoes
-                       .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
-                       (!model.ClientId.HasValue && rec.DateDelivery.Date == model.DateDelivery.Date) ||
-                       (!model.ClientId.HasValue && model.PageNumber.HasValue) ||
-                       (model.ClientId.HasValue && rec.ClientId == model.ClientId && model.PageNumber.HasValue));
-
-                if (model.PageNumber.HasValue)
-                {
-                    if(model.PageNumber.Value == 0)
+                return context.MessageInfoes
+               // письма клиента
+               .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
+               // по дате
+               (!model.ClientId.HasValue && rec.DateDelivery.Date ==
+               model.DateDelivery.Date))
+               .Select(rec => new MessageInfoViewModel
+               {
+                   MessageId = rec.MessageId,
+                   SenderName = rec.SenderName,
+                   DateDelivery = rec.DateDelivery,
+                   Subject = rec.Subject,
+                   Body = rec.Body
+               })
+               .ToList();
+            }
+        }
+        public int Count()
+        {
+            using (var context = new FoodOrdersDatabase())
+            {
+                return context.MessageInfoes.Count();
+            }
+        }
+        public List<MessageInfoViewModel> GetMessagesForPage(MessageInfoBindingModel model)
+        {
+            using (var context = new FoodOrdersDatabase())
+            {
+                return context.MessageInfoes.Where(rec => (model.ClientId.HasValue &&
+                model.ClientId.Value == rec.ClientId) || !model.ClientId.HasValue)
+                    .Skip((model.Page.Value - 1) * model.PageSize.Value).Take(model.PageSize.Value)
+                    .ToList().Select(rec => new MessageInfoViewModel
                     {
-                        model.PageNumber = 1;
-                    }
-                    messageInfoes = messageInfoes.Skip(stringsOnPage * (model.PageNumber.Value - 1))
-                        .Take(stringsOnPage);
-                }
-                return messageInfoes.Select(rec => new MessageInfoViewModel
-                {
-                    MessageId = rec.MessageId,
-                    SenderName = rec.SenderName,
-                    DateDelivery = rec.DateDelivery,
-                    Subject = rec.Subject,
-                    Body = rec.Body
-                })
-                .ToList();
+                        MessageId = rec.MessageId,
+                        SenderName = rec.SenderName,
+                        DateDelivery = rec.DateDelivery,
+                        Subject = rec.Subject,
+                        Body = rec.Body
+                    }).ToList();
             }
         }
         public void Insert(MessageInfoBindingModel model)

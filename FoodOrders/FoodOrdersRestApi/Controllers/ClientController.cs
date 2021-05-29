@@ -31,11 +31,8 @@ namespace FoodOrdersRestApi.Controllers
         { Email = login, Password = password })?[0];
 
         [HttpGet]
-        public List<MessageInfoViewModel> GetMessages(int clientId, int pageNumber) => _mailLogic.Read(new MessageInfoBindingModel
-        {
-            ClientId = clientId,
-            PageNumber = pageNumber
-        });
+        public List<MessageInfoViewModel> GetMessages(int clientId) =>
+            _mailLogic.Read(new MessageInfoBindingModel { ClientId = clientId });
 
         [HttpPost]
         public void Register(ClientBindingModel model)
@@ -50,7 +47,16 @@ namespace FoodOrdersRestApi.Controllers
             CheckData(model);
             _logic.CreateOrUpdate(model);
         }
-
+        [HttpGet]
+        public PageViewModel GetPage(int pageSize, int page, int ClientId)
+        {
+            return new PageViewModel(_mailLogic.Count(), page, pageSize, _mailLogic.GetMessagesForPage(new MessageInfoBindingModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                ClientId = ClientId
+            }));
+        }
         private void CheckData(ClientBindingModel model)
         {
             if (!Regex.IsMatch(model.Email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +

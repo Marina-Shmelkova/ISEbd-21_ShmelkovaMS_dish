@@ -26,5 +26,10 @@ namespace FoodOrdersBusinessLogic.BindingModels
 
         [DataMember]
         public int? PageNumber { get; set; }
+        [DataMember]
+        public int? PageSize { get; set; }
+
+        [DataMember]
+        public int? Page { get; set; }
     }
 }
