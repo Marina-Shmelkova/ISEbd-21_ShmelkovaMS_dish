@@ -1,11 +1,13 @@
 ﻿using FoodOrdersBusinessLogic.BindingModels;
 using FoodOrdersBusinessLogic.BusinessLogics;
+using FoodOrdersBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,7 +30,9 @@ namespace FoodOrdersView
         {
             try
             {
-                var dict = logic.GetComponentsDish();
+                MethodInfo method = logic.GetType().GetMethod("GetComponentsDish");
+                List<ReportComponentDishViewModel> dict = (List<ReportComponentDishViewModel>)
+                    method.Invoke(logic, new object[] { });
                 if (dict != null)
                 {
                     dataGridView.Rows.Clear();
@@ -57,10 +61,11 @@ namespace FoodOrdersView
                 {
                     try
                     {
-                        logic.SaveComponentDishToExcelFile(new ReportBindingModel
+                        MethodInfo method = logic.GetType().GetMethod("SaveComponentDishToExcelFile");
+                        method.Invoke(logic, new object[] { new ReportBindingModel
                         {
                             FileName = dialog.FileName
-                        });
+                        } });
                         MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
