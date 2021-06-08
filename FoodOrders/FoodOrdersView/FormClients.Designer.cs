@@ -42,12 +42,12 @@ namespace FoodOrdersView
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Location = new System.Drawing.Point(22, 47);
             this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(313, 308);
+            this.dataGridView.Size = new System.Drawing.Size(440, 308);
             this.dataGridView.TabIndex = 18;
             // 
             // buttonDel
             // 
-            this.buttonDel.Location = new System.Drawing.Point(368, 142);
+            this.buttonDel.Location = new System.Drawing.Point(515, 245);
             this.buttonDel.Name = "buttonDel";
             this.buttonDel.Size = new System.Drawing.Size(75, 23);
             this.buttonDel.TabIndex = 16;
@@ -57,7 +57,7 @@ namespace FoodOrdersView
             // 
             // buttonUpd
             // 
-            this.buttonUpd.Location = new System.Drawing.Point(368, 87);
+            this.buttonUpd.Location = new System.Drawing.Point(515, 190);
             this.buttonUpd.Name = "buttonUpd";
             this.buttonUpd.Size = new System.Drawing.Size(75, 23);
             this.buttonUpd.TabIndex = 15;
@@ -69,7 +69,7 @@ namespace FoodOrdersView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 392);
+            this.ClientSize = new System.Drawing.Size(627, 392);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.buttonDel);
             this.Controls.Add(this.buttonUpd);
